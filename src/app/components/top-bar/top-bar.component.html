@@ -1,0 +1,24 @@
+<div class="top-bar">
+  <div class="logo">
+    <img src="Logo 1.png" [routerLink]="['/']" alt="Logo">
+  </div>
+
+  <div class="search">
+    <form>
+      <input type="text" placeholder="Search..." />
+    </form>
+  </div>
+
+  <!-- Appearance 1 -->
+  <div *ngIf="appearance === 1" class="buttons">
+    <button class="primary-button" [routerLink]="['/login']">Login</button>
+    <button class="secondary-button" [routerLink]="['/signup']">Sign Up</button>
+  </div>
+
+  <!-- Appearance 2 -->
+  <div *ngIf="appearance === 2" class="menu-items">
+    <button class="secondary-button" [routerLink]="['/gallery']">Gallery</button>
+    <button class="secondary-button" [routerLink]="['/my-images']">Edit</button>
+    <img src="perfil.png" class="profile-image" alt="Profile">
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="image-slider">
+  <p-carousel 
+    [value]="images" 
+    [numVisible]="3" 
+    [numScroll]="3" 
+    [circular]="true"
+    [showIndicators]="false"
+    [autoplayInterval]="3000"
+  >
+    <ng-template class="center" let-image pTemplate="item">
+      <img [src]="image" alt="Image"/>
+    </ng-template>
+  </p-carousel>
+  <p-carousel 
+    [value]="images2" 
+    [numVisible]="3" 
+    [numScroll]="3" 
+    [circular]="true"
+    [showIndicators]="false"
+    [autoplayInterval]="3000"
+  >
+    <ng-template let-image pTemplate="item">
+      <img [src]="image" alt="Image"/>
+    </ng-template>
+  </p-carousel>
+</div>

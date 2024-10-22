@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+  margin:0;
+  font-family: 'Montserrat Alternates', sans-serif;
+  background-color: #f4f4f4;
+}
+
+.primary-button, .secondary-button {
+  border-radius: 50px;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.primary-button {
+  background-color: #FF870B;
+  color: white;
+  border: none;
+}
+
+.secondary-button {
+  background-color: #F6F6F6;
+  color: black;
+  border: none;
+}

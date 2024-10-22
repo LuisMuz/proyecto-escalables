@@ -1,0 +1,14 @@
+img {
+  width: auto;
+  height: 300px; 
+  object-fit:scale-down; 
+  margin-right: 10px;
+  border-radius: 5px;
+} 
+
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}

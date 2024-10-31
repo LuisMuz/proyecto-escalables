@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
   background-color: #FE9309;
   padding: 10px 20px;
 }
@@ -34,6 +33,14 @@
   height: 40px;
   border-radius: 50%;
 }
+
+.profile-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

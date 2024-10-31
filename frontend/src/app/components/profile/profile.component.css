@@ -1,0 +1,37 @@
+.container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.point {
+    background-color: black;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    background-color: #F96916;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+.name {
+    font-size: 30px;
+}

@@ -119,8 +119,9 @@
     font-size: 16px;
     cursor: pointer;
     font-weight: 500;
+    margin-bottom: 10px;
   }
-  
+/*   
   .divider {
     display: flex;
     justify-content: center;
@@ -168,7 +169,7 @@
   .btn-google span {
     padding-left: 40px;
   }
-  
+   */
   
   .disclaimer {
     font-size: 12px;

@@ -36,12 +36,12 @@ interface ImageItem {
 export class MyImagesComponent implements OnInit {
   images: ImageItem[] = [];
   imagePublic: boolean = false;
-  selectedImage: ImageItem | null = {
-    src: 'images/anders-jilden-uwbajDCODj4-unsplash.jpg',
-    name: 'Image',
-    isPublic: false
-  }
-  // selectedImage: ImageItem | null = null;
+  // selectedImage: ImageItem | null = {
+  //   src: 'images/anders-jilden-uwbajDCODj4-unsplash.jpg',
+  //   name: 'Image',
+  //   isPublic: false
+  // }
+  selectedImage: ImageItem | null = null;
   items: MegaMenuItem[] | undefined;
 
   menuActions = [

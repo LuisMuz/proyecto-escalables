@@ -62,14 +62,6 @@
   border-radius: 10px;
 }
 
-.card-header {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  padding: 1rem;
-  gap: 20px;
-}
-
 .edit-content {
   width:100%;
   display: flex;
@@ -82,31 +74,10 @@
   max-width: 300px;
 }
 
-.image-preview {
-  flex: 2;
+.modal-buttons{
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.image-preview img {
-  max-width: 100%;
-  max-height: 500px;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
-.edited-image {
-  max-width: 100%;
-  max-height: 500px;
-  object-fit: contain;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: flex-end;
+  justify-content: end;
   gap: 10px;
-  padding: 1rem;
 }
 
 ::ng-deep .p-button {
@@ -117,7 +88,3 @@
   background: #F96916;
 }
 
-:host ::ng-deep .edit-card .p-card{ 
-  border-radius: 25px ; 
-  padding-inline:30px;
-} 

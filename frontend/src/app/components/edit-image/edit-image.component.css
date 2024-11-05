@@ -1,0 +1,39 @@
+.edited-image {
+  max-width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+}
+
+.card-header {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 1rem;
+  gap: 20px;
+}
+
+.image-preview {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 1rem;
+}
+
+:host ::ng-deep .edit-card .p-card{ 
+  border-radius: 25px ; 
+  padding-inline:30px;
+} 

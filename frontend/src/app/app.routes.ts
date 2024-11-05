@@ -13,7 +13,7 @@ export const routes: Routes = [
   {path:"login", component: LoginComponent},
   {path:"gallery", component: GalleryPageComponent},
   {path:"signup", component: SignupComponent},
-  {path:"my-images", component: EditComponent},
+  {path:"my-images/edit", component: EditComponent},
   {path:"images", component: ShowImagesPageComponent},
   {path:"profile", component: ProfilePageComponent}
 ];

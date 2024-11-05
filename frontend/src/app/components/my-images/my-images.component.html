@@ -1,5 +1,4 @@
-
-<div *ngIf="!selectedImage" class="images-grid">
+<div class="images-grid">
   <div class="p-card" *ngFor="let image of images">
     <img [src]="image.src" [alt]="image.name" class="image">
     <div class="p-card">
@@ -10,39 +9,19 @@
         <div class="actions">
           <div class="left">
             <p-inputSwitch [(ngModel)]="image.isPublic"></p-inputSwitch>
-            <button pButton icon="pi pi-pencil" (click)="editImage(image)" class="p-button-rounded p-button-warning"></button>
+            <button pButton icon="pi pi-pencil" (click)="editImage(image)"
+              class="p-button-rounded p-button-warning"></button>
           </div>
-          <button pButton icon="pi pi-trash" (click)="deleteImage(image)" class="p-button-rounded p-button-danger"></button>
+          <button pButton icon="pi pi-trash" (click)="toggleDelete(image)"
+            class="p-button-rounded p-button-danger"></button>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<div *ngIf="selectedImage" class="edit-card">
-  <p-card>
-    <ng-template pTemplate="header">
-      <div class="card-header">
-        <h3>Actions</h3>
-        <!-- <div class="edit-content">
-          <p-megaMenu [model]="items" />
-        </div> -->
-      </div>
-    </ng-template>
-  
-  
-    <div class="image-preview">
-      <img [src]="selectedImage.src" [alt]="selectedImage.name" class="edited-image">
-    </div>
-    
-    <ng-template pTemplate="footer">
-      <div class="card-footer">
-        <button pButton label="Save image" (click)="saveImage()" class="primary-button"></button>
-        <button pButton label="Save & Publish" (click)="saveAndPublish()" class="primary-button"></button>
-        <button pButton label="Cancel" (click)="cancelEdit()" class="secondary-button"></button>
-      </div>
-    </ng-template>  
-  </p-card>
-</div>
-
-<p-confirmDialog></p-confirmDialog>
+<p-dialog header="Confirm delete" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <div class="modal-buttons">
+    <button label="Cancel" class="secondary-button" (click)="toggleDelete(null)">Cancel</button>
+    <button label="Save" class="primary-button">Delete</button>
+  </div>
+</p-dialog>

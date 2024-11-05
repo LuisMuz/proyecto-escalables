@@ -1,20 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputSwitchModule } from 'primeng/inputswitch';
-import { ConfirmationService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MenuModule } from 'primeng/menu';
 import { CardModule } from 'primeng/card';
 import { MegaMenuItem } from 'primeng/api';
 import { MegaMenuModule } from 'primeng/megamenu';
-
-interface ImageItem {
-  src: string;
-  name: string;
-  isPublic: boolean;
-}
+import { DialogModule } from 'primeng/dialog';
+import { ImageItem } from '../../model/image-item';
+import { ImageService } from '../../services/image.service';
 
 @Component({
   selector: 'app-my-images',
@@ -24,25 +19,21 @@ interface ImageItem {
     ButtonModule,
     InputSwitchModule,
     FormsModule,
-    ConfirmDialogModule,
     MenuModule,
     CardModule,
-    MegaMenuModule
+    MegaMenuModule,
+    DialogModule
   ],
   templateUrl: './my-images.component.html',
   styleUrls: ['./my-images.component.css'],
-  providers: [ConfirmationService]
+  providers: []
 })
 export class MyImagesComponent implements OnInit {
   images: ImageItem[] = [];
   imagePublic: boolean = false;
-  // selectedImage: ImageItem | null = {
-  //   src: 'images/anders-jilden-uwbajDCODj4-unsplash.jpg',
-  //   name: 'Image',
-  //   isPublic: false
-  // }
-  selectedImage: ImageItem | null = null;
   items: MegaMenuItem[] | undefined;
+  visible: boolean = false;
+  imageService = inject(ImageService);
 
   menuActions = [
     { label: 'Brightness', icon: 'pi pi-sun', command: () => this.applyFilter('brightness') },
@@ -50,7 +41,7 @@ export class MyImagesComponent implements OnInit {
     { label: 'Saturation', icon: 'pi pi-palette', command: () => this.applyFilter('saturation') },
   ];
 
-  constructor(private confirmationService: ConfirmationService) { }
+  constructor() { }
 
   ngOnInit() {
     this.loadImages();
@@ -167,7 +158,8 @@ export class MyImagesComponent implements OnInit {
       'images/nasa--hI5dX2ObAs-unsplash.jpg',
       'images/patrick-hendry-jd0hS7Vhn_A-unsplash.jpg',
       'images/pawan-sharma-n1jB9kcXbpg-unsplash.jpg',
-      'images/robert-lukeman-zNN6ubHmruI-unsplash.jpg'
+      'images/robert-lukeman-zNN6ubHmruI-unsplash.jpg',
+      'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3cyejF3bGpvdmpiMGtqYTVzZGozamhldW0zNWdhZWZreHQ3eXluZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2rAKTgJIQe1buYU1R5/giphy.webp'
     ].map(src => ({
       src,
       name: this.getImageName(src),
@@ -180,35 +172,16 @@ export class MyImagesComponent implements OnInit {
   }
 
   editImage(image: ImageItem) {
-    this.selectedImage = image;
     console.log('Edit image:', image.name);
+    this.imageService.setImage(image);
   }
 
-  deleteImage(image: ImageItem) {
-    this.confirmationService.confirm({
-      message: `¿Estás seguro de que quieres eliminar la imagen "${image.name}"?`,
-      accept: () => {
-        this.images = this.images.filter(img => img.src !== image.src);
-        console.log('Image deleted:', image.name);
-      }
-    });
-  }
-
-  backToGrid() {
-    this.selectedImage = null;
-  }
-
-  saveImage() {
-    console.log('Saving image:', this.selectedImage?.name);
-
-  }
-
-  saveAndPublish() {
-    console.log('Saving and publishing image:', this.selectedImage?.name);
-  }
-
-  cancelEdit() {
-    this.selectedImage = null;
+  toggleDelete(image: ImageItem | null) {
+    console.log(this.imageService.getImage()?.name);
+    this.visible = this.visible? false : true;
+    if (image) {
+      console.log('Delete image:', image.name);
+    }
   }
 
   applyFilter(filter: string) {

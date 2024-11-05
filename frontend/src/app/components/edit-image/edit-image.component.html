@@ -1,0 +1,26 @@
+<p>edit-image works!</p>
+<div class="edit-card">
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h3>Actions</h3>
+        <!-- <div class="edit-content">
+          <p-megaMenu [model]="items" />
+        </div> -->
+      </div>
+    </ng-template>
+  
+  
+    <div class="image-preview">
+      <img [src]="selectedImage?.src" [alt]="selectedImage?.name" class="edited-image">
+    </div>
+    
+    <ng-template pTemplate="footer">
+      <div class="card-footer">
+        <button pButton label="Save image" (click)="saveImage()" class="primary-button"></button>
+        <button pButton label="Save & Publish" (click)="saveAndPublish()" class="primary-button"></button>
+        <button pButton label="Cancel" (click)="cancelEdit()" class="secondary-button"></button>
+      </div>
+    </ng-template>  
+  </p-card>
+</div>

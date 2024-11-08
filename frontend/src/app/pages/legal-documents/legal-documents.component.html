@@ -1,0 +1,14 @@
+<div class="top-bar">
+    <div class="logo">
+      <img src="Logo 1.png" [routerLink]="['/']" alt="Logo">
+    </div>
+
+    <div class="buttons">
+        <button class="secondary-button" [routerLink]="['/privacy-policy']">Privacy Policy</button>
+        <button class="secondary-button" [routerLink]="['/terms-of-service']">Terms of service</button>
+        <button class="secondary-button" [routerLink]="['/information-collection-notice']">Information Collection Notice</button>
+    </div>
+
+</div>
+
+<router-outlet></router-outlet>

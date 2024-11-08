@@ -24,7 +24,8 @@
       
             <button type="submit" class="btn-register" [routerLink]="['/gallery']">Sign In</button>
           </form>
-      
+          <br>
+<!--       
           <div class="divider">
             <div class="line"></div>
             <span class="circle-divider">Or</span>
@@ -33,10 +34,11 @@
       
           
           <button class="btn-google">Continue with Google</button>
-      
+       -->
           <p class="disclaimer">
-            By continuing, you accept PixelArt's <a href="" class="privacy"><b>Terms of Service</b></a> and acknowledge that you have read our <a href="" class="privacy"><b>Privacy Policy</b></a>. <a href="" class="privacy"><b>Information collection notice</b></a>.
+            By continuing, you accept PixelArt's <a [routerLink]="['/terms-of-service']" class="privacy"><b>Terms of Service</b></a> and acknowledge that you have read our <a [routerLink]="['/privacy-policy']" class="privacy"><b>Privacy Policy</b></a>. <a [routerLink]="['/information-collection-notice']" class="privacy"><b>Information collection notice</b></a>.
           </p>
+
           <p class="login">
             Not on PixelArt? <a [routerLink]="['/signup']"><b>Sign up</b></a>
           </p>

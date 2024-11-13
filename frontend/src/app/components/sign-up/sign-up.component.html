@@ -14,17 +14,19 @@
           </div>
           <h1>Welcome to PixelArt</h1>
           <p>Experiment editing your images</p>
-      
-          <form [formGroup]="form">
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <label for="full-name">Full Name</label>
             <input type="text" id="full-name" placeholder="Full Name" formControlName="fullName">
 
             <label for="username">Username</label>
             <input type="text" id="username" placeholder="Username" formControlName="username">
+            <div *ngIf="usernameAvailable === true" style="color: green;">Username is available</div>
+            <div *ngIf="usernameAvailable === false" style="color: red;">Username is already taken</div>
 
             <label for="email">Email</label>
             <input type="email" id="email" placeholder="Email" formControlName="email">
-      
+
             <label for="password">Password</label>
 
             <input type="password" id="password" placeholder="Create password" formControlName="password">
@@ -35,19 +37,22 @@
 
             <label for="dob">Date of Birth</label>
             <input type="date" id="dob" placeholder="dd/mm/yyyy" formControlName="dob">
-      
+
             <button type="submit" class="btn-register">Sign Up</button>
           </form>
-<!--       
+
+          <div *ngIf="errorMessage" style="color: red;">{{errorMessage}}</div>
+
+<!--
           <div class="divider">
             <div class="line"></div>
             <span class="circle-divider">Or</span>
             <div class="line"></div>
           </div>
-      
-          
+
+
           <button class="btn-google">Continue with Google</button> -->
-      
+
           <p class="disclaimer">
             By continuing, you accept PixelArt's <a href="" class="privacy"><b>Terms of Service</b></a> and acknowledge that you have read our <a href="" class="privacy"><b>Privacy Policy</b></a>. <a href="" class="privacy"><b>Information collection notice</b></a>.
           </p>
@@ -55,5 +60,5 @@
             Are you a member? <a [routerLink]="['/login']"><b>Log in</b></a>
           </p>
         </div>
-    </div>      
+    </div>
 </body>

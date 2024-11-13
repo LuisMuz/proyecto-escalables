@@ -4,3 +4,5 @@
 *firebase_configure.py
 *pixel-art.json
 *temp_uploads
+*.vscode
+*.idea

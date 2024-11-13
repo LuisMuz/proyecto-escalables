@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import firebase
 from firebase_configure import firebaseConfig
 import os
@@ -8,6 +9,16 @@ from datetime import date
 
 # Initialize Firebase and Flask
 app = Flask(__name__)
+CORS(
+    app,
+    resources={
+        r"/*": {
+            "origins": "*",
+            "supports_credentials": True,
+            "Access-Control-Allow-Credentials": True,
+        }
+    },
+)
 firebase_app = firebase.initialize_app(firebaseConfig)
 
 auth = firebase_app.auth()
@@ -31,6 +42,8 @@ def signup():
     email = data.get('email')
     password = data.get('password')
     name = data.get('name')
+    user_name = data.get('user_name')
+    user_birth = data.get('user_birth')
     
     # Create user in Firebase
     user = auth.create_user_with_email_and_password(email, password)
@@ -38,7 +51,9 @@ def signup():
     # Store user data in database
     user_data = {
       "name": name,
-      "email": email
+      "email": email,
+      "user_name": user_name,
+      "user_birth": user_birth,
     }
     db.child("users").child(user['localId']).set(user_data, user['idToken'])
     
@@ -52,6 +67,7 @@ def signup():
 
 @app.route('/api/login', methods=['POST'])
 def login():
+  print("Attempting to login")
   try:
     data = request.get_json()
     print(data)
@@ -61,14 +77,38 @@ def login():
     # Firebase auth
     user = auth.sign_in_with_email_and_password(email, password)
     
+    user_data = db.child("users").child(user['localId']).get(user['idToken']).val()
+    print("Sending user data...")
+    print()
     return jsonify({
       'message': 'Successfully logged in',
       'userId': user['localId'],
-      'idToken': user['idToken']
+      'idToken': user['idToken'],
+      'userData': user_data
     }), 200
       
   except Exception as e:
     return jsonify({'error': str(e)}), 400
+  
+# Verificación de username en uso
+@app.route('/api/check-username', methods=['POST'])
+def check_username():
+  try:
+    print("Checking username...")
+    data = request.get_json()
+    user_name = data.get('user_name')
+    # Buscar en la base de datos usuarios con ese user_name
+    users = db.child("users").get()
+
+    # Recorre los usuarios y verifica si alguno tiene el mismo user_name
+    for user in users.each():
+        if user.val().get("user_name") == user_name:
+            return jsonify({'exists': True}), 200  # Nombre de usuario ya en uso
+
+    return jsonify({'exists': False}), 200  # Regresa si el usuario existe
+  except Exception as e:
+    return jsonify({'error': str(e)}), 500
+
 
 # Image upload route
 @app.route('/api/upload', methods=['POST'])
@@ -197,6 +237,10 @@ def get_user_images(user_id):
       
   except Exception as e:
     return jsonify({'error': str(e)}), 500
+  
+@app.route('/api/about', methods=['GET'])
+def show():
+  return jsonify({'message': 'Hello World!'})
 
 if __name__ == '__main__':
   app.run(debug=True)

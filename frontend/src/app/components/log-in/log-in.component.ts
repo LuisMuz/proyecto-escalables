@@ -1,21 +1,44 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-log-in',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, RouterLinkActive],
+  imports: [
+    ReactiveFormsModule, RouterLink, 
+    RouterLinkActive, CommonModule
+  ],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.css'
 })
 export class LogInComponent {
   form: FormGroup;
+  _errorMessage : string | undefined;
 
-  constructor() {
-    this.form = new FormGroup ({
-      email: new FormControl("", Validators.required),
-      password: new FormControl("", Validators.required)
-    })
+  constructor(private authService: AuthService, private router: Router) {
+    this.form = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
+  }
+
+  onSubmit() {
+    console.log(this.form.value)
+    if (this.form.valid) {
+      const { email, password } = this.form.value;
+      this.authService.login(email, password).subscribe({
+        next: (response) => {
+          // console.log(response);
+          this.router.navigate(['/gallery']); 
+        },
+        error: (error) => {
+          console.error('Login failed', error);
+          this._errorMessage = error.error.message;
+        }
+      });
+    }
   }
 }

@@ -15,14 +15,15 @@
           <h1>Welcome to PixelArt</h1>
           <br>
       
-          <form [formGroup]="form">
+          <form [formGroup]="form" (submit)="onSubmit()">
             <label for="email">Email</label>
             <input type="email" id="email" placeholder="Email" formControlName="email">
       
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Password" formControlName="password">
       
-            <button type="submit" class="btn-register" [routerLink]="['/gallery']">Sign In</button>
+            <button type="submit" class="btn-register" >Sign In</button>
+            <div *ngIf="_errorMessage" style="color: red;">{{_errorMessage}}</div>
           </form>
       
           <div class="divider">

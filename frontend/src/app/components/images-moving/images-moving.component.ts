@@ -25,7 +25,18 @@ export class ImagesMovingComponent {
     'images/johannes-plenio-DKix6Un55mw-unsplash.jpg',
 
   ];
+
   images2: string[] = [
+    "images/anders-jilden-uwbajDCODj4-unsplash.jpg",
+    'images/bob-brewer-zJF1lRdUdAw-unsplash.jpg',
+    'images/josh-rakower-zBsXaPEBSeI-unsplash.jpg',
+    'images/kimon-maritz-1-ISIwuBMiw-unsplash.jpg',
+    'images/geranimo-qzgN45hseN0-unsplash.jpg',
+    'images/johannes-plenio-DKix6Un55mw-unsplash.jpg',
+
+  ];
+
+  images3: string[] = [
     'images/josh-rakower-zBsXaPEBSeI-unsplash.jpg',
     'images/kimon-maritz-1-ISIwuBMiw-unsplash.jpg',
     'images/morais-G-bQlVMt1H8-unsplash.jpg',
@@ -48,5 +59,5 @@ export class ImagesMovingComponent {
   'https://via.placeholder.com/400x300',
   'https://via.placeholder.com/400x300'
   ];
-
+  
 }

@@ -1,12 +1,16 @@
 <div class="container">
-    <img class="profile-image" src="perfil.png" class="profile-image" alt="Profile">
+  <img class="profile-image" src="perfil.png" alt="Profile">
 
-    <span class="name"><p><b>{{name}}</b></p></span>
-    
-    <span class="info"><div class="logo"></div>{{username}}</span>
-    <br>
-    <span class="info">n public images<div class="point"></div>n private images</span>
-    <br>
-    <button class="primary-button" (click)="logout()">Log Out</button>
+  <span class="name"><p><b>{{name}}</b></p></span>
+
+  <span class="info"><div class="logo"></div>{{username}}</span>
+  <br>
+  <span class="info">n public images<div class="point"></div>n private images</span>
+  <br>
+
+  <div class="button-section">
+    <button (click)="onUploadImage()" class="primary-button">Subir imagen</button>
+    <button class="secondary-button" (click)="logout()">Log Out</button>
+  </div>
 
 </div>

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -15,6 +15,8 @@ export class ProfileComponent {
   authService = inject(AuthService);
   router = inject(Router);
 
+  @Output() sendImage = new EventEmitter<any>();
+
   constructor() {}
 
   name = this.userService.getName();
@@ -27,4 +29,10 @@ export class ProfileComponent {
     this.authService.logout();
     this.router.navigate(['/']);
   }
+
+  onUploadImage() {
+    this.sendImage.emit();
+  }
+
+
 }

@@ -1,2 +1,28 @@
-<app-profile></app-profile>
+<app-profile (sendImage)="showImageUploadDialog()"></app-profile>
 <app-my-images></app-my-images>
+
+<p-dialog class="image-modal" header="Upload Image"
+          [modal]="true"
+          [(visible)]="visible"
+          [style]="{'border-radius':'50px'}">
+  <div class="upload-layout">
+    <span>You can upload your images here!</span>
+
+    <p-fileUpload
+      mode="basic"
+      chooseLabel="Choose"
+      chooseIcon="pi pi-upload"
+      accept="image/*"
+      maxFileSize="1000000"
+      (onSelect)="onFileSelected($event)"
+      [style]="{'background':'#FF870B', 'border-width':'0px'}"
+    >
+    </p-fileUpload>
+
+    <button class="secondary-button"
+            (click)="onUpload()"
+            [disabled]="!selectedFile">
+      Subir
+    </button>
+  </div>
+</p-dialog>

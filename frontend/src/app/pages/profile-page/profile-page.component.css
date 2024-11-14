@@ -1,0 +1,12 @@
+:host ::ng-deep .image-modal .ui-dialog-content {
+  background-color: orange;
+  border-radius: 8px; /* Añade un borde redondeado, opcional */
+}
+
+.upload-layout{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}

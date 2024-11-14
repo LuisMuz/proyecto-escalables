@@ -55,7 +55,7 @@ def signup():
       "user_name": user_name,
       "user_birth": user_birth,
     }
-    db.child("users").child(user['localId']).set(user_data, user['idToken'])
+    db.child("users").child(user['localId']).set(user_data)
     
     return jsonify({
       'message': 'Successfully created user',
@@ -77,7 +77,7 @@ def login():
     # Firebase auth
     user = auth.sign_in_with_email_and_password(email, password)
     
-    user_data = db.child("users").child(user['localId']).get(user['idToken']).val()
+    user_data = db.child("users").child(user['localId']).get().val()
     print("Sending user data...")
     print()
     return jsonify({
@@ -114,6 +114,7 @@ def check_username():
 @app.route('/api/upload', methods=['POST'])
 def upload_image():
   try:
+    print("Requesting image upload")
     # Verify token
     token = request.headers.get('Authorization')
     if not token:
@@ -121,13 +122,14 @@ def upload_image():
         
     user = auth.get_account_info(token)
     user_id = user['users'][0]['localId']
-    
+
     if 'file' not in request.files:
       return jsonify({'error': 'No file part'}), 400
         
     file = request.files['file']
     if file.filename == '':
       return jsonify({'error': 'No selected file'}), 400
+    print("File found")
         
     if file and allowed_file(file.filename):
       # Create unique filename

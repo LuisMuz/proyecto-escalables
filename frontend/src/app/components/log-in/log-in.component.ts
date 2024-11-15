@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 
@@ -8,8 +8,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-log-in',
   standalone: true,
   imports: [
-    ReactiveFormsModule, RouterLink, 
-    RouterLinkActive, CommonModule
+    ReactiveFormsModule, RouterLink, CommonModule
   ],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.css'

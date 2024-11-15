@@ -1,4 +1,25 @@
 <div class="images-grid">
+  <div class="p-card" *ngFor="let image of userImages">
+    <img [src]="image.url" [alt]="image.filename" class="image">
+    <div class="p-card">
+      <div class="card-info">
+        <div class="name">
+          <span>{{ image.filename }}</span>
+        </div>
+        <div class="actions">
+          <div class="left">
+            <p-inputSwitch [(ngModel)]="image.public"></p-inputSwitch>
+            <button pButton icon="pi pi-pencil"
+                    class="p-button-rounded p-button-warning"></button>
+          </div>
+          <button pButton icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="images-grid">
   <div class="p-card" *ngFor="let image of images">
     <img [src]="image.src" [alt]="image.name" class="image">
     <div class="p-card">

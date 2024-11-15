@@ -8,7 +8,7 @@ import { CardModule } from 'primeng/card';
 import { MegaMenuItem } from 'primeng/api';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { DialogModule } from 'primeng/dialog';
-import { ImageItem } from '../../model/image-item';
+import {ImageData, ImageItem} from '../../model/image-item';
 import { ImageService } from '../../services/image.service';
 
 @Component({
@@ -30,10 +30,10 @@ import { ImageService } from '../../services/image.service';
 })
 export class MyImagesComponent implements OnInit {
   images: ImageItem[] = [];
-  imagePublic: boolean = false;
   items: MegaMenuItem[] | undefined;
   visible: boolean = false;
   imageService = inject(ImageService);
+  userImages: ImageData[] | null = null;
 
   menuActions = [
     { label: 'Brightness', icon: 'pi pi-sun', command: () => this.applyFilter('brightness') },
@@ -45,6 +45,7 @@ export class MyImagesComponent implements OnInit {
 
   ngOnInit() {
     this.loadImages();
+
     this.items = [
       {
         label: 'Filters',
@@ -142,6 +143,15 @@ export class MyImagesComponent implements OnInit {
       }
     ]
 
+    this.imageService.getUserImages().subscribe({
+      next: (response) => {
+        this.userImages = response.images;
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(`Error: ${error}`);
+      }
+    });
   }
 
   loadImages() {

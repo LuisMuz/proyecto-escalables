@@ -1,4 +1,4 @@
-import {Component, inject, ViewEncapsulation} from '@angular/core';
+import {Component, inject, ViewEncapsulation, OnInit} from '@angular/core';
 import { ProfileComponent } from '../../components/profile/profile.component';
 import { MyImagesComponent } from '../../components/my-images/my-images.component';
 import { DialogModule } from 'primeng/dialog';
@@ -18,13 +18,14 @@ interface UploadEvent {
   styleUrl: './profile-page.component.css',
   encapsulation: ViewEncapsulation.None
 })
-export class ProfilePageComponent {
+export class ProfilePageComponent{
 
   visible = false; // Controla la visibilidad del modal
   selectedFile: File | null = null; // Variable para almacenar el archivo seleccionado
   imageService = inject(ImageService);
 
-  constructor() {}
+  constructor() {
+  }
 
   showImageUploadDialog() {
     this.visible = true;

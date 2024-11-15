@@ -152,7 +152,8 @@ def upload_image():
         "url": image_url,
         "filename": unique_filename,
         "uploadedAt": date.today().isoformat(),
-        "likes": 0
+        "likes": 0,
+        "public":"true"
       }
       
       image_ref = db.child("images").push(image_data, token)

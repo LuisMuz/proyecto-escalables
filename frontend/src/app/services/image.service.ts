@@ -29,4 +29,9 @@ export class ImageService {
     // Llama al endpoint de subida de imágenes
     return this.http.post(`${this.apiUrl}/upload`, formData);
   }
+
+  getUserImages(): Observable<any>{
+    const userId = localStorage.getItem('userId');
+    return this.http.get(`${this.apiUrl}/users/${userId}/images`);
+  }
 }

@@ -11,6 +11,7 @@
   justify-content: space-between;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  overflow: hidden;
 }
 
 .image {
@@ -22,24 +23,30 @@
 }
 
 .card-info {
-  display: grid;
-  grid-template-areas:
-    'image-name'
-    'action-buttons';
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   padding: 10px;
 }
 
 .name {
-  grid-area: image-name;
   font-size: 1.1em;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .actions {
-  grid-area: action-buttons;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.actions .left {
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
 
@@ -47,37 +54,8 @@
   border-radius: 50%;
 }
 
-.left {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.edit-card {
-  max-width: 1200px;
-  padding: 30px;
-  margin: 20px auto;
-  display: grid;
-  border-radius: 10px;
-}
-
-.edit-content {
-  width:100%;
-  display: flex;
-  gap: 20px;
-  padding: 1rem;
-}
-
-.filters-section {
-  flex: 1;
-  max-width: 300px;
-}
-
-.modal-buttons{
-  display: flex;
-  justify-content: end;
-  gap: 10px;
+.p-button {
+  flex-shrink: 0; /* Evita que los botones se reduzcan si hay overflow */
 }
 
 ::ng-deep .p-button {
@@ -87,4 +65,3 @@
 ::ng-deep .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
   background: #F96916;
 }
-

@@ -26,6 +26,14 @@
   border-radius: 10px;
 }
 
+.edit-content{
+  display: flex;
+  flex-direction: column;
+  /*justify-content: start;*/
+  align-items: start;
+  width: 100%;
+}
+
 .card-footer {
   display: flex;
   justify-content: flex-end;
@@ -33,7 +41,9 @@
   padding: 1rem;
 }
 
-:host ::ng-deep .edit-card .p-card{ 
-  border-radius: 25px ; 
+:host ::ng-deep .edit-card .p-card{
+  border-radius: 25px ;
   padding-inline:30px;
-} 
+}
+
+:host ::ng-deep .edit-card .edit-card-body{}

@@ -8,41 +8,24 @@
         </div>
         <div class="actions">
           <div class="left">
-            <p-inputSwitch [(ngModel)]="image.public"></p-inputSwitch>
+            <p-inputSwitch (onChange)="togglePrivacy(image)" [(ngModel)]="image.public"></p-inputSwitch>
             <button pButton icon="pi pi-pencil"
                     class="p-button-rounded p-button-warning"></button>
           </div>
           <button pButton icon="pi pi-trash"
-                  class="p-button-rounded p-button-danger"></button>
+                  class="p-button-rounded p-button-danger"
+                  (click)="toggleDelete(image)"
+          ></button>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="images-grid">
-  <div class="p-card" *ngFor="let image of images">
-    <img [src]="image.src" [alt]="image.name" class="image">
-    <div class="p-card">
-      <div class="card-info">
-        <div class="name">
-          <span>{{ image.name }}</span>
-        </div>
-        <div class="actions">
-          <div class="left">
-            <p-inputSwitch [(ngModel)]="image.isPublic"></p-inputSwitch>
-            <button pButton icon="pi pi-pencil" (click)="editImage(image)"
-              class="p-button-rounded p-button-warning"></button>
-          </div>
-          <button pButton icon="pi pi-trash" (click)="toggleDelete(image)"
-            class="p-button-rounded p-button-danger"></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
 <p-dialog header="Confirm delete" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <span>{{imageToDelete?.filename}}</span>
   <div class="modal-buttons">
     <button label="Cancel" class="secondary-button" (click)="toggleDelete(null)">Cancel</button>
-    <button label="Save" class="primary-button">Delete</button>
+    <button label="Delete" class="primary-button" (click)="deleteImage(imageToDelete)">Delete</button>
   </div>
 </p-dialog>

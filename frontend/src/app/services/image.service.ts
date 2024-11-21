@@ -34,4 +34,13 @@ export class ImageService {
     const userId = localStorage.getItem('userId');
     return this.http.get(`${this.apiUrl}/users/${userId}/images`);
   }
+
+  toggleImagePrivacy(imageId: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/images/${imageId}/toggle-privacy`, {});
+  }
+
+  deleteImage(imageId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/images/${imageId}/delete`);
+  }
+
 }

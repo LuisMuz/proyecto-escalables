@@ -30,126 +30,31 @@ import { ImageService } from '../../services/image.service';
 })
 export class MyImagesComponent implements OnInit {
   images: ImageItem[] = [];
-  items: MegaMenuItem[] | undefined;
   visible: boolean = false;
   imageService = inject(ImageService);
-  userImages: ImageData[] | null = null;
-
-  menuActions = [
-    { label: 'Brightness', icon: 'pi pi-sun', command: () => this.applyFilter('brightness') },
-    { label: 'Contrast', icon: 'pi pi-percentage', command: () => this.applyFilter('contrast') },
-    { label: 'Saturation', icon: 'pi pi-palette', command: () => this.applyFilter('saturation') },
-  ];
+  userImages: ImageData[] | undefined;
+  imageToDelete: ImageData | null = null;
 
   constructor() { }
 
   ngOnInit() {
     this.loadImages();
-
-    this.items = [
-      {
-        label: 'Filters',
-        icon: 'pi pi-box',
-        items: [
-          [
-            {
-              label: 'Living Room',
-              items: [{ label: 'Accessories' }, { label: 'Armchair' }, { label: 'Coffee Table' }, { label: 'Couch' }, { label: 'TV Stand' }]
-            }
-          ],
-          [
-            {
-              label: 'Kitchen',
-              items: [{ label: 'Bar stool' }, { label: 'Chair' }, { label: 'Table' }]
-            },
-            {
-              label: 'Bathroom',
-              items: [{ label: 'Accessories' }]
-            }
-          ],
-          [
-            {
-              label: 'Bedroom',
-              items: [{ label: 'Bed' }, { label: 'Chaise lounge' }, { label: 'Cupboard' }, { label: 'Dresser' }, { label: 'Wardrobe' }]
-            }
-          ],
-          [
-            {
-              label: 'Office',
-              items: [{ label: 'Bookcase' }, { label: 'Cabinet' }, { label: 'Chair' }, { label: 'Desk' }, { label: 'Executive Chair' }]
-            }
-          ]
-        ]
-      },
-      {
-        label: 'Electronics',
-        icon: 'pi pi-mobile',
-        items: [
-          [
-            {
-              label: 'Computer',
-              items: [{ label: 'Monitor' }, { label: 'Mouse' }, { label: 'Notebook' }, { label: 'Keyboard' }, { label: 'Printer' }, { label: 'Storage' }]
-            }
-          ],
-          [
-            {
-              label: 'Home Theather',
-              items: [{ label: 'Projector' }, { label: 'Speakers' }, { label: 'TVs' }]
-            }
-          ],
-          [
-            {
-              label: 'Gaming',
-              items: [{ label: 'Accessories' }, { label: 'Console' }, { label: 'PC' }, { label: 'Video Games' }]
-            }
-          ],
-          [
-            {
-              label: 'Appliances',
-              items: [{ label: 'Coffee Machine' }, { label: 'Fridge' }, { label: 'Oven' }, { label: 'Vaccum Cleaner' }, { label: 'Washing Machine' }]
-            }
-          ]
-        ]
-      },
-      {
-        label: 'Sports',
-        icon: 'pi pi-clock',
-        items: [
-          [
-            {
-              label: 'Football',
-              items: [{ label: 'Kits' }, { label: 'Shoes' }, { label: 'Shorts' }, { label: 'Training' }]
-            }
-          ],
-          [
-            {
-              label: 'Running',
-              items: [{ label: 'Accessories' }, { label: 'Shoes' }, { label: 'T-Shirts' }, { label: 'Shorts' }]
-            }
-          ],
-          [
-            {
-              label: 'Swimming',
-              items: [{ label: 'Kickboard' }, { label: 'Nose Clip' }, { label: 'Swimsuits' }, { label: 'Paddles' }]
-            }
-          ],
-          [
-            {
-              label: 'Tennis',
-              items: [{ label: 'Balls' }, { label: 'Rackets' }, { label: 'Shoes' }, { label: 'Training' }]
-            }
-          ]
-        ]
-      }
-    ]
+    const test: boolean = false;
 
     this.imageService.getUserImages().subscribe({
       next: (response) => {
-        this.userImages = response.images;
-        console.log(response);
+        this.userImages = response.images.map((image: ImageData) => {
+          // @ts-ignore
+          return ({
+            ...image,
+            filename: this.getImageName(image.filename),
+            public: this.checkPrivacy(image),
+          });
+        });
+        console.log(this.userImages);
       },
       error: (error) => {
-        console.log(`Error: ${error}`);
+        console.error('Error al cargar imágenes:', error);
       }
     });
   }
@@ -178,7 +83,11 @@ export class MyImagesComponent implements OnInit {
   }
 
   getImageName(src: string): string {
-    return src.split('/').pop()?.split('.')[0] || '';
+    return src.split('_').pop()?.split('.')[0] || '';
+  }
+
+  checkPrivacy(image: ImageData):boolean {
+    return image.public.toString() == "true";
   }
 
   editImage(image: ImageItem) {
@@ -186,16 +95,43 @@ export class MyImagesComponent implements OnInit {
     this.imageService.setImage(image);
   }
 
-  toggleDelete(image: ImageItem | null) {
-    console.log(this.imageService.getImage()?.name);
+  toggleDelete(image: ImageData | null) {
+    this.imageToDelete = image;
     this.visible = this.visible? false : true;
     if (image) {
-      console.log('Delete image:', image.name);
+      console.log('Delete image:', image.filename);
     }
   }
 
   applyFilter(filter: string) {
     console.log(`Applying ${filter} filter`);
   }
+
+  togglePrivacy(image: ImageData) {
+    this.imageService.toggleImagePrivacy(image.id).subscribe({
+      next: (response) => {
+        console.log(`Privacy toggled: ${response.message}`);
+        image.public = response.public === 'true'; // Actualiza localmente
+      },
+      error: (error) => {
+        console.error('Error al cambiar privacidad:', error);
+      }
+    });
+  }
+
+  deleteImage(image: ImageData | null) {
+    if(image){
+      this.imageService.deleteImage(image.id).subscribe({
+        next: (response) => {
+          console.log('Image deleted:', response);
+          this.userImages = this.userImages?.filter(img => img.id !== image.id); // Update UI
+        },
+        error: (error) => {
+          console.error('Error deleting image:', error);
+        }
+      });
+    }
+  }
+
 
 }

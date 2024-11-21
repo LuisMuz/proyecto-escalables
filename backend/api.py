@@ -215,6 +215,38 @@ def like_image(image_id):
   except Exception as e:
     return jsonify({'error': str(e)}), 500
 
+# Change image's privacy
+@app.route('/api/images/<image_id>/toggle-privacy', methods=['PATCH'])
+def toggle_image_privacy(image_id):
+  try:
+    # Verify token
+    token = request.headers.get('Authorization')
+    if not token:
+      return jsonify({'error': 'No token provided'}), 401
+
+    user = auth.get_account_info(token)
+    user_id = user['users'][0]['localId']
+
+    # Obtener datos actuales de la imagen
+    image_ref = db.child("images").child(image_id).get(token)
+    image_data = image_ref.val()
+
+    if not image_data:
+      return jsonify({'error': 'Image not found'}), 404
+
+    # Cambiar el estado de 'public'
+    new_privacy_status = "false" if image_data.get("public") == "true" else "true"
+    db.child("images").child(image_id).update({"public": new_privacy_status}, token)
+
+    return jsonify({
+      'message': f'Image privacy updated to {"Public" if new_privacy_status == "true" else "Private"}',
+      'imageId': image_id,
+      'public': new_privacy_status
+    }), 200
+  except Exception as e:
+    return jsonify({'error': str(e)}), 500
+
+
 # Get user's images
 @app.route('/api/users/<user_id>/images', methods=['GET'])
 def get_user_images(user_id):
@@ -240,9 +272,55 @@ def get_user_images(user_id):
       
   except Exception as e:
     return jsonify({'error': str(e)}), 500
+
+@app.route('/api/images/<image_id>/delete', methods=['DELETE'])
+def delete_image(image_id):
+  try:
+    # Verify token
+    token = request.headers.get('Authorization')
+    if not token:
+      return jsonify({'error': 'No token provided'}), 401
+
+    # Authenticate user
+    user = auth.get_account_info(token)
+    user_id = user['users'][0]['localId']
+
+    # Fetch image details
+    image_ref = db.child("images").child(image_id).get(token)
+    image_data = image_ref.val()
+
+    if not image_data:
+      return jsonify({'error': 'Image not found'}), 404
+
+    # Extract the storage path from the image URL
+    storage_path = image_data.get("url").split("o/")[-1].split("?")[0].replace("%2F", "/")
+
+    # Delete the image from Firebase Storage
+    storage.child(storage_path).delete()
+
+    # Remove the image data from the 'images' table
+    db.child("images").child(image_id).remove()
+
+    # Remove the image reference from the user's images
+    db.child("users").child(user_id).child("images").child(image_id).remove()
+
+    return jsonify({
+      'message': 'Image deleted successfully',
+      'imageId': image_id
+    }), 200
+
+  except Exception as e:
+    return jsonify({'error': str(e)}), 500
+
+
   
 @app.route('/api/about', methods=['GET'])
 def show():
+  image_id = "-OC-uwYPbbSr7IYpwRtF"
+  path = "yMJS2DOOG6YwoE6sMzx70dU7orp2/4bdafe6d-f402-4138-b610-a34559b8be3b_t-rex.png"
+  storage.child("images").child(path).delete()
+  # Remove image data from the database
+  db.child("images").child(image_id).remove()
   return jsonify({'message': 'Hello World!'})
 
 

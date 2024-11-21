@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import {MenuItem} from "primeng/api";
+import { MenubarModule } from 'primeng/menubar';
 
 interface ImageItem {
   src: string;
@@ -12,7 +14,7 @@ interface ImageItem {
   selector: 'app-edit-image',
   standalone: true,
   imports: [
-    CardModule, ButtonModule
+    CardModule, ButtonModule, MenubarModule
   ],
   templateUrl: './edit-image.component.html',
   styleUrl: './edit-image.component.css'
@@ -20,6 +22,30 @@ interface ImageItem {
 
 export class EditImageComponent {
   selectedImage: ImageItem | null = null;
+  items: MenuItem[] | undefined;
+
+  ngOnInit() {
+    this.items = [
+      {
+        label: 'Original Image',
+        icon: 'pi pi-home'
+      },
+      {
+        label: 'Enhance',
+        icon: 'pi pi-star',
+        items:[
+          {
+            label: 'Sharpening',
+            icon: 'pi pi-palette',
+          },
+          {
+            label: 'Brightness and Contrast',
+            icon: 'pi pi-palette',
+          }
+        ]
+      }
+    ];
+  }
 
   constructor(){
     this.selectedImage = {

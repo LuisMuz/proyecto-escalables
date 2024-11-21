@@ -245,5 +245,27 @@ def get_user_images(user_id):
 def show():
   return jsonify({'message': 'Hello World!'})
 
+
+  
+  
+  
+@app.route('/api/images/gallery', methods=['GET'])
+def get_public_images():
+    try:
+        all_images = db.child("images").get()
+        public_images = []
+
+        if all_images and all_images.each():
+            for image in all_images.each():
+                image_data = image.val()
+                if image_data.get("public") == True:
+                    image_data["id"] = image.key()
+                    public_images.append(image_data)
+
+        return jsonify({'images': public_images}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
   app.run(debug=True)

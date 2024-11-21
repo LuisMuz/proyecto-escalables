@@ -3,64 +3,14 @@
 
 <body>
     <div class="container">
-        <div class="card">
-            <p-image src="https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png" alt="Image"
+        <div class="card" *ngFor="let image of images">
+            <p-image [src]="image" alt="Image"
             width = "100%" 
             [preview]="true" />
 
             <div class="card-info" type="button" [routerLink]="['/images']" routerLinkActive="menu-item-selected">
                 <div class="author">
                     <img src="https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png" alt="Autor">
-                    <span>user</span>
-                </div>
-                <div class="likes">
-                    <span>11 likes</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <p-image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86S_ZlKylXOd3eTqAW5KXxkngeiP-uUxtNA&s" alt="Image"
-            width = "100%"
-            [preview]="true" />
-
-
-            <div class="card-info">
-                <div class="author">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86S_ZlKylXOd3eTqAW5KXxkngeiP-uUxtNA&s" alt="Autor">
-                    <span>user</span>
-                </div>
-                <div class="likes">
-                    <span>11 likes</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <p-image src="https://i.pinimg.com/564x/50/07/ed/5007edd4af49dc476e6dc43b5863aac5.jpg" alt="Image"
-            width = "100%" 
-            [preview]="true" />
-
-            <div class="card-info">
-                <div class="author">
-                    <img src="https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png" alt="Autor">
-                    <span>user</span>
-                </div>
-                <div class="likes">
-                    <span>11 likes</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <p-image src="https://i.pinimg.com/736x/eb/c4/89/ebc489171288429cc8927b4df3c959b6.jpg" alt="Image"
-            width = "100%"
-            [preview]="true" />
-
-
-            <div class="card-info">
-                <div class="author">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86S_ZlKylXOd3eTqAW5KXxkngeiP-uUxtNA&s" alt="Autor">
                     <span>user</span>
                 </div>
                 <div class="likes">

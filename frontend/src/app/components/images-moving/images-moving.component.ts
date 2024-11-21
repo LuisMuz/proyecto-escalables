@@ -15,7 +15,6 @@ import {ImageModule} from 'primeng/image';
 })
 
 export class ImagesMovingComponent {
-
   images: string[] = [
     "images/anders-jilden-uwbajDCODj4-unsplash.jpg",
     'images/bob-brewer-zJF1lRdUdAw-unsplash.jpg',
@@ -58,6 +57,5 @@ export class ImagesMovingComponent {
   'https://via.placeholder.com/400x300',
   'https://via.placeholder.com/400x300',
   'https://via.placeholder.com/400x300'
-  ];
-  
+  ]; 
 }

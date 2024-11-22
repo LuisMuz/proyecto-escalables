@@ -330,19 +330,45 @@ def show():
 @app.route('/api/images/gallery', methods=['GET'])
 def get_public_images():
     try:
+        # Verify token
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'No token provided'}), 401
+        
+        # Get the logged-in user's ID
+        user = auth.get_account_info(token)
+        current_user_id = user['users'][0]['localId']
+        
+        # Fetch all images
         all_images = db.child("images").get()
         public_images = []
 
         if all_images and all_images.each():
             for image in all_images.each():
                 image_data = image.val()
-                if image_data.get("public") == True:
-                    image_data["id"] = image.key()
-                    public_images.append(image_data)
-
+                if image_data.get("public") == "true":  # Ensure image is public
+                  
+                    # Fetch the user who owns this image
+                    owner = None
+                    users = db.child("users").get()
+                    for user_entry in users.each():
+                        user_images = user_entry.val().get("images", {})
+                        if image.key() in user_images:
+                            owner = user_entry.key()
+                            break
+                    
+                    # Exclude images from the current user
+                    if owner and owner != current_user_id:
+                        image_data["id"] = image.key()
+                        image_data["user_id"] = owner
+                        image_data["user_name"] = db.child("users").child(owner).child("user_name").get().val()
+                        public_images.append(image_data)
+        
         return jsonify({'images': public_images}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
 
 
 if __name__ == '__main__':

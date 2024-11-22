@@ -4,17 +4,17 @@
 <body>
     <div class="container">
         <div class="card" *ngFor="let image of images">
-            <p-image [src]="image" alt="Image"
+            <p-image [src]="image.url" alt="Image"
             width = "100%" 
             [preview]="true" />
 
             <div class="card-info" type="button" [routerLink]="['/images']" routerLinkActive="menu-item-selected">
                 <div class="author">
                     <img src="https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png" alt="Autor">
-                    <span>user</span>
+                    <span>{{image.user_name}}</span>
                 </div>
                 <div class="likes">
-                    <span>11 likes</span>
+                    <span>{{image.likes}}</span>
                 </div>
             </div>
         </div>

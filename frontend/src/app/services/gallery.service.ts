@@ -14,5 +14,9 @@ export class GalleryService {
     const headers = new HttpHeaders().set('Authorization', token);
     return this.http.get(`${this.API_URL}/images/gallery`, { headers });
   }
-  
+
+  getImageDetails(imageId: string, token: string): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', token);
+    return this.http.get(`${this.API_URL}/images/${imageId}`, { headers });
+  }
 }

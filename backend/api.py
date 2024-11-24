@@ -367,6 +367,39 @@ def get_public_images():
         return jsonify({'images': public_images}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+      
+
+
+@app.route('/api/images/<image_id>', methods=['GET'])
+def get_image_details(image_id):
+    try:
+        # Verify token
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'No token provided'}), 401
+
+        # Get the logged-in user's ID
+        image_data = db.child("images").child(image_id).get(token).val()
+
+        if not image_data:
+            return jsonify({'error': 'Image not found'}), 404
+
+        # Add user data
+        owner = None
+        users = db.child("users").get()
+        for user_entry in users.each():
+            user_images = user_entry.val().get("images", {})
+            if image_id in user_images:
+                owner = user_entry.key()
+                break
+
+        if owner:
+            image_data["user_id"] = owner
+            image_data["user_name"] = db.child("users").child(owner).child("user_name").get().val()
+
+        return jsonify(image_data), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 

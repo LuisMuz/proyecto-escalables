@@ -18,7 +18,7 @@ export const routes: Routes = [
   {path:"gallery", component: GalleryPageComponent},
   {path:"signup", component: SignupComponent},
   {path:"my-images/edit", component: EditComponent},
-  {path:"images", component: ShowImagesPageComponent},
+  {path:"images/:id", component: ShowImagesPageComponent},
   {path:"profile", component: ProfilePageComponent},
   { 
     path: 'privacy-policy', 

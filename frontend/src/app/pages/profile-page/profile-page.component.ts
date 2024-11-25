@@ -48,6 +48,7 @@ export class ProfilePageComponent{
         console.log("Imagen subida con éxito:", response);
         alert("Image uploaded successfully!");
         this.visible = false; // Cierra el modal después de la carga exitosa
+        window.location.reload()
       },
       error: (error) => {
         console.error("Error al subir la imagen:", error);

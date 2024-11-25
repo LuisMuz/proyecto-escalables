@@ -265,7 +265,7 @@ def get_user_images(user_id):
         image_data = db.child("images").child(image_id).get(token).val()
         image_data['id'] = image_id
         images.append(image_data)
-            
+
     return jsonify({
       'images': images
     }), 200
@@ -396,7 +396,25 @@ def get_image_details(image_id):
         if owner:
             image_data["user_id"] = owner
             image_data["user_name"] = db.child("users").child(owner).child("user_name").get().val()
+            
+        
+        # Process the filename
+        filename = image_data.get("filename", "")
+        if "_" in filename:
+            short_name_with_ext = filename.split("_", 1)[1]  # Part without UUID
+        else:
+            short_name_with_ext = filename
 
+        # Extract name and extension
+        name_base, extension = os.path.splitext(short_name_with_ext)
+        short_name = name_base  
+        image_type = extension.lstrip(".")  
+
+        # Add new fields to the response
+        image_data["short_name"] = short_name
+        image_data["image_type"] = image_type
+        
+            
         return jsonify(image_data), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500

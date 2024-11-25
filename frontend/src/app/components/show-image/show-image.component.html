@@ -7,7 +7,7 @@
 
 
             <div class="image-info">
-                <h2>{{image?.filename}}</h2>
+                <h2>{{image?.short_name}}</h2>
                 <div class="metadata">
                     <div class="author">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86S_ZlKylXOd3eTqAW5KXxkngeiP-uUxtNA&s" alt="Autor">
@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="additional-info">
-                    <p><b>File Type:</b></p>
+                    <p><b>File Type:</b> {{image?.image_type}}</p>
                     <p><b>Date:</b> {{image?.uploadedAt}}</p>
                     <p><b>Time:</b></p>
                     <p><b>Location:</b></p>

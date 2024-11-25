@@ -38,7 +38,6 @@ export class MyImagesComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.loadImages();
     const test: boolean = false;
 
     this.imageService.getUserImages().subscribe({
@@ -59,31 +58,26 @@ export class MyImagesComponent implements OnInit {
     });
   }
 
-  loadImages() {
-    this.images = [
-      "images/anders-jilden-uwbajDCODj4-unsplash.jpg",
-      'images/bob-brewer-zJF1lRdUdAw-unsplash.jpg',
-      'images/buzz-andersen-E4944K_4SvI-unsplash.jpg',
-      'images/christian-joudrey-u_nsiSvPEak-unsplash.jpg',
-      'images/geranimo-qzgN45hseN0-unsplash.jpg',
-      'images/johannes-plenio-DKix6Un55mw-unsplash.jpg',
-      'images/josh-rakower-zBsXaPEBSeI-unsplash.jpg',
-      'images/kimon-maritz-1-ISIwuBMiw-unsplash.jpg',
-      'images/morais-G-bQlVMt1H8-unsplash.jpg',
-      'images/nasa--hI5dX2ObAs-unsplash.jpg',
-      'images/patrick-hendry-jd0hS7Vhn_A-unsplash.jpg',
-      'images/pawan-sharma-n1jB9kcXbpg-unsplash.jpg',
-      'images/robert-lukeman-zNN6ubHmruI-unsplash.jpg',
-      'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3cyejF3bGpvdmpiMGtqYTVzZGozamhldW0zNWdhZWZreHQ3eXluZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2rAKTgJIQe1buYU1R5/giphy.webp'
-    ].map(src => ({
-      src,
-      name: this.getImageName(src),
-      isPublic: false
-    }));
-  }
+
 
   getImageName(src: string): string {
-    return src.split('_').pop()?.split('.')[0] || '';
+    // Find the first '_'
+    const parts = src.split('_');
+    if (parts.length < 2) {
+      return src;
+    }
+
+    const nameWithExtension = parts.slice(1).join('_'); 
+
+    // Find the last '.'
+    const lastDotIndex = nameWithExtension.lastIndexOf('.');
+    if (lastDotIndex === -1) {
+      return nameWithExtension;
+    }
+
+    const shortName = nameWithExtension.substring(0, lastDotIndex);
+
+    return shortName;
   }
 
   checkPrivacy(image: ImageData):boolean {

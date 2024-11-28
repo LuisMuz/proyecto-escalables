@@ -28,6 +28,7 @@ export class AuthService {
         localStorage.setItem('idToken', response.idToken);
         localStorage.setItem('userData', JSON.stringify(response.userData));
         localStorage.setItem('userId', response.userId);
+        localStorage.setItem('userRole', response.userData.role);
         console.log("Login successful");
       })
     );
@@ -41,9 +42,15 @@ export class AuthService {
     localStorage.removeItem('idToken');
     localStorage.removeItem('userData');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
   }
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('idToken');
+  }
+
+  getUserRole(): string | null {
+    console.log(localStorage.getItem('userRole'));
+    return localStorage.getItem('userRole');
   }
 }

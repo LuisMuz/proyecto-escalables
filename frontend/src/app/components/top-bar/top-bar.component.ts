@@ -34,6 +34,8 @@ export class TopBarComponent {
       this.currentUrl = event.url;
       if(!this.authService.isLoggedIn() || this.publicRoutes.includes(this.currentUrl)){
         this.appearance = 1;
+      }else if(this.authService.getUserRole() == 'admin'){
+        this.appearance = 3;
       }else{
         this.appearance = 2;
       }

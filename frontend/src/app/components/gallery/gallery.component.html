@@ -1,26 +1,5 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=thumb_up" />
 
-<!-- 
-<body>
-    <div class="container">
-        <div class="card" *ngFor="let image of images">
-            <p-image [src]="image.url" alt="Image"
-            width = "100%" 
-            [preview]="true" />
-
-            <div class="card-info" type="button" (click)="nextPage(image.id)" [routerLink]="['/images', image.id]" routerLinkActive="menu-item-selected">
-                <div class="author">
-                    <img src="https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png" alt="Autor">
-                    <span>{{image.user_name}}</span>
-                </div>
-                <div class="likes">
-                    <span>{{image.likes}} likes</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</body> -->
-
 <body>
     <div class="container">
         <ng-container *ngFor="let image of images">
@@ -52,3 +31,4 @@
         </ng-container>
     </div>
 </body>
+

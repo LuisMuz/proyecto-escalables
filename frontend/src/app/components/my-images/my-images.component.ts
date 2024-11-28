@@ -106,6 +106,7 @@ export class MyImagesComponent implements OnInit {
       next: (response) => {
         console.log(`Privacy toggled: ${response.message}`);
         image.public = response.public === 'true'; // Actualiza localmente
+        window.location.reload();
       },
       error: (error) => {
         console.error('Error al cambiar privacidad:', error);

@@ -20,7 +20,7 @@ export class ImageService {
     this._selectedImage = image;
   }
 
-  private apiUrl = 'http://localhost:5000/api'; // URL base de tu API
+  private apiUrl = 'http://localhost:5000/api';
 
   uploadImage(file: File): Observable<any> {
     const formData = new FormData();

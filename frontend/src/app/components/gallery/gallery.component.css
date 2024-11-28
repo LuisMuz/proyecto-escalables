@@ -43,6 +43,7 @@
 .card p-image img {
     zoom: 200%;
     object-fit: fill;
+    width: 100%;
 }
 
 .card-info {
@@ -82,3 +83,17 @@
     border-radius: 50%;
     margin-right: 4px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -22,4 +22,13 @@
       <img src="perfil.png" class="profile-image" alt="Profile">
     </button>
   </div>
+
+  <!-- Appearance 3 -->
+  <div *ngIf="appearance === 3" class="menu-items">
+    <button class="secondary-button" [routerLink]="['/gallery']">Gallery</button>
+    <button class="secondary-button" [routerLink]="['/administration']">Administration</button>
+    <button class="profile-button" [routerLink]="['/profile']">
+      <img src="perfil.png" class="profile-image" alt="Profile">
+    </button>
+  </div>
 </div>

@@ -1,0 +1,28 @@
+<div class="images-grid">
+    <div class="p-card" *ngFor="let image of publicImages">
+      <img [src]="image.url" [alt]="image.filename" class="image">
+      <div class="p-card">
+        <div class="card-info">
+          <div class="name">
+            <span>{{ image.filename }}</span>
+          </div>
+          
+          <div class="actions">
+            <button pButton icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger"
+                    (click)="toggleDelete(image)"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+  
+<p-dialog header="Confirm delete" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <span>{{imageToDelete?.filename}}</span>
+    <div class="modal-buttons">
+      <button label="Cancel" class="secondary-button" (click)="toggleDelete(null)">Cancel</button>
+      <button label="Delete" class="primary-button" (click)="deleteImage(imageToDelete)">Delete</button>
+    </div>
+</p-dialog>
+  

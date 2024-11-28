@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ImageItem } from '../model/image-item';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, ObservedValueOf} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,10 @@ export class ImageService {
 
   deleteImage(imageId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/images/${imageId}/delete`);
+  }
+
+  getPublicImages(): Observable<any>{
+    return this.http.get(`${this.apiUrl}/admin/public-images`);
   }
 
 }

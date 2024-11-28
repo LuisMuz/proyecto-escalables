@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { AdministrationComponent } from "../../components/administration/administration.component";
-import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
+import { AdministrationImgComponent } from "../../components/administration-img/administration-img.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AdministrationComponent],
+  imports: [AdministrationComponent, AdministrationImgComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

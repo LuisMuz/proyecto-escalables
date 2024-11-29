@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ImageItem } from '../model/image-item';
+import {ImageData, ImageItem} from '../model/image-item';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class ImageService {
 
-  private _selectedImage : ImageItem | undefined;
+  private _selectedImage : ImageData | undefined;
 
   constructor(private http: HttpClient) {}
 
@@ -16,11 +16,11 @@ export class ImageService {
     return this._selectedImage;
   }
 
-  setImage(image: ImageItem) {
+  setImage(image: ImageData) {
     this._selectedImage = image;
   }
 
-  private apiUrl = 'http://localhost:5000/api'; // URL base de tu API
+  private apiUrl = 'http://localhost:5000/api';
 
   uploadImage(file: File): Observable<any> {
     const formData = new FormData();
@@ -43,4 +43,15 @@ export class ImageService {
     return this.http.delete(`${this.apiUrl}/images/${imageId}/delete`);
   }
 
+  editImage(imageId: string, action: string): Observable<any> {
+    console.log({
+      imageId: imageId,
+      action: action,
+    });
+    return this.http.post(`${this.apiUrl}/images/${imageId}/edit`, {action});
+  }
+
+  getImageById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/images/${id}`);
+  }
 }

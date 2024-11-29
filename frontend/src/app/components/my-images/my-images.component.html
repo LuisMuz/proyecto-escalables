@@ -9,7 +9,10 @@
         <div class="actions">
           <div class="left">
             <p-inputSwitch (onChange)="togglePrivacy(image)" [(ngModel)]="image.public"></p-inputSwitch>
-            <button pButton icon="pi pi-pencil"
+            <button *ngIf="!image.filename.endsWith('gif')"
+                    pButton icon="pi pi-pencil"
+                    (click)="editImage(image)"
+                    [routerLink]="['/my-images/edit']"
                     class="p-button-rounded p-button-warning"></button>
           </div>
           <button pButton icon="pi pi-trash"
@@ -22,7 +25,7 @@
   </div>
 </div>
 
-<p-dialog header="Confirm delete" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+<p-dialog header="Confirm delete" [modal]="true" [(visible)]="visible" [style]="{}">
   <span>{{imageToDelete?.filename}}</span>
   <div class="modal-buttons">
     <button label="Cancel" class="secondary-button" (click)="toggleDelete(null)">Cancel</button>

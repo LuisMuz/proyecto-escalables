@@ -6,6 +6,8 @@ import os
 from werkzeug.utils import secure_filename
 import uuid
 from datetime import date
+import cv2
+import numpy as np
 
 # Initialize Firebase and Flask
 app = Flask(__name__)
@@ -27,12 +29,16 @@ storage = firebase_app.storage()
 
 # Configure upload settings
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS_EDIT = {'png', 'jpg', 'jpeg'}
 UPLOAD_FOLDER = 'temp_uploads'
 if not os.path.exists(UPLOAD_FOLDER):
   os.makedirs(UPLOAD_FOLDER)
 
 def allowed_file(filename):
-  return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS 
+  return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def allowed_file_to_edit(filename):
+  return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS_EDIT
 
 # Authentication routes
 @app.route('/api/signup', methods=['POST'])
@@ -312,19 +318,113 @@ def delete_image(image_id):
   except Exception as e:
     return jsonify({'error': str(e)}), 500
 
+# Get image by id
+@app.route('/api/images/<image_id>', methods=['Get'])
+def get_image(image_id):
+  try:
+    token = request.headers.get('Authorization')
+    if not token:
+      return jsonify({'error': 'No token provided'}), 401
 
-  
+    # Fetch image details
+    image_ref = db.child("images").child(image_id).get(token)
+    image_data = image_ref.val()
+
+    return jsonify({
+      'image': image_data
+    }), 200
+  except Exception as e:
+    return jsonify({'error': str(e)}), 500
+
+# Image edition route
+@app.route('/api/images/<image_id>/edit', methods=['POST'])
+def edit_image(image_id):
+  try:
+    print("Requesting image edition")
+    # Verify token
+    token = request.headers.get('Authorization')
+    if not token:
+      return jsonify({'error': 'No token provided'}), 401
+
+    user = auth.get_account_info(token)
+    user_id = user['users'][0]['localId']
+
+    data = request.json
+    action = data.get('action')
+
+    # Fetch image details
+    image_ref = db.child("images").child(image_id).get(token)
+    image_data = image_ref.val()
+
+    if not image_data:
+      return jsonify({'error': 'Image not found'}), 404
+
+    storage_path = image_data['url'].split("o/")[-1].split("?")[0].replace("%2F", "/")
+    temp_path = os.path.join(UPLOAD_FOLDER, image_data['filename'])
+
+    storage.child(storage_path).download(temp_path)
+
+    # space to edit image
+    image = cv2.imread(temp_path)
+
+    if action == 'sharp':
+      alpha = 1.5
+      beta = 50
+      image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
+    elif action == 'b-c':
+      kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+      image = cv2.filter2D(image, -1, kernel)
+    elif action == 'blur':
+      image = cv2.medianBlur(image, 17)
+
+    print(f'Image {image_data['filename']} processed')
+
+    # Guardar la imagen editada
+    name = image_data['filename'].split(".")
+    edited_filename = f"{name[0]}-{action}.{name[1]}"
+    edited_path = os.path.join(UPLOAD_FOLDER, edited_filename)
+    cv2.imwrite(f'{edited_path}', image)
+
+
+    # Subir la nueva imagen a Firebase
+    edited_storage_path = f"images/{user_id}/{edited_filename}"
+    storage.child(edited_storage_path).put(edited_path, token)
+    print("New Image uploaded")
+
+    # Obtener la URL de la nueva imagen
+    edited_url = storage.child(edited_storage_path).get_url(token)
+
+    # Save image info in database
+    image_data = {
+      "url": edited_url,
+      "filename": edited_filename,
+      "uploadedAt": date.today().isoformat(),
+      "likes": 0,
+      "public":"false"
+    }
+
+    # Actualizar la base de datos con la nueva imagen
+    image_ref = db.child("images").push(image_data, token)
+
+    # Add image reference to user's images
+    db.child("users").child(user_id).child("images").child(image_ref['name']).set(True, token)
+
+    # Limpiar archivos temporales
+    os.remove(temp_path)
+    os.remove(edited_path)
+
+    return jsonify({
+      'message': 'Image edited successfully',
+      'url': edited_url,
+      'imageId': image_ref['name']
+    }), 200
+  except Exception as e:
+    return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/about', methods=['GET'])
 def show():
-  image_id = "-OC-uwYPbbSr7IYpwRtF"
-  path = "yMJS2DOOG6YwoE6sMzx70dU7orp2/4bdafe6d-f402-4138-b610-a34559b8be3b_t-rex.png"
-  storage.child("images").child(path).delete()
-  # Remove image data from the database
-  db.child("images").child(image_id).remove()
-  return jsonify({'message': 'Hello World!'})
-
-
-  
+  return jsonify({'message': 'Hello there!'})
   
   
 @app.route('/api/images/gallery', methods=['GET'])

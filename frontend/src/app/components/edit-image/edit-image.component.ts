@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, inject, ViewEncapsulation} from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import {MenuItem} from "primeng/api";
 import { MenubarModule } from 'primeng/menubar';
+import {ImageData} from "../../model/image-item";
+import {ImageService} from "../../services/image.service";
 
 interface ImageItem {
   src: string;
@@ -17,18 +19,24 @@ interface ImageItem {
     CardModule, ButtonModule, MenubarModule
   ],
   templateUrl: './edit-image.component.html',
-  styleUrl: './edit-image.component.css'
+  styleUrl: './edit-image.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 
 export class EditImageComponent {
-  selectedImage: ImageItem | null = null;
+  selectedImage: ImageData | undefined;
+  originalImage: ImageData | undefined;
   items: MenuItem[] | undefined;
+  imageService = inject(ImageService);
 
   ngOnInit() {
     this.items = [
       {
         label: 'Original Image',
-        icon: 'pi pi-home'
+        icon: 'pi pi-home',
+        command: () => {
+          this.selectedImage = this.originalImage ? this.originalImage : this.selectedImage;
+        }
       },
       {
         label: 'Enhance',
@@ -37,10 +45,23 @@ export class EditImageComponent {
           {
             label: 'Sharpening',
             icon: 'pi pi-palette',
+            command: () => {
+              this.applyFilter("sharp");
+            }
           },
           {
             label: 'Brightness and Contrast',
             icon: 'pi pi-palette',
+            command: () => {
+              this.applyFilter("b-c");
+            }
+          },
+          {
+            label: 'Blur',
+            icon: 'pi pi-palette',
+            command: () => {
+              this.applyFilter("blur");
+            }
           }
         ]
       }
@@ -48,23 +69,36 @@ export class EditImageComponent {
   }
 
   constructor(){
-    this.selectedImage = {
-      src: 'images/anders-jilden-uwbajDCODj4-unsplash.jpg',
-      name: 'Image',
-      isPublic: false
+    this.selectedImage = this.imageService.getImage();
+  }
+
+  applyFilter(filter: string) {
+    if(this.selectedImage) {
+      this.imageService.editImage(this.selectedImage.id, filter).subscribe({
+        next: (response) => {
+          const imageId = response.imageId;
+          this.obtainNewImage(imageId);
+        },
+        error: (error) => {
+          console.log("Error al aplicar filtro", error);
+        }
+      });
     }
   }
 
-  saveAndPublish() {
-    console.log('Saving and publishing image:', this.selectedImage?.name);
-  }
-
   cancelEdit() {
-    this.selectedImage = null;
+    this.selectedImage = undefined;
   }
 
-  saveImage() {
-    console.log('Saving image:', this.selectedImage?.name);
+  obtainNewImage(id : string) {
+    this.imageService.getImageById(id).subscribe({
+      next: (response) => {
+        this.originalImage = this.selectedImage;
+        this.selectedImage = response.image;
+      },
+      error: (error) => {
+        console.log("Error al obtener nueva image", error);
+      }
+    })
   }
-
 }

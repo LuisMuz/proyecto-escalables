@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, OnInit, ViewEncapsulation} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -26,7 +26,7 @@ import { ImageService } from '../../services/image.service';
   ],
   templateUrl: './my-images.component.html',
   styleUrls: ['./my-images.component.css'],
-  providers: []
+  providers: [],
 })
 export class MyImagesComponent implements OnInit {
   images: ImageItem[] = [];
@@ -83,15 +83,15 @@ export class MyImagesComponent implements OnInit {
   }
 
   getImageName(src: string): string {
-    return src.split('_').pop()?.split('.')[0] || '';
+    return src.split('_').pop() || '';
   }
 
   checkPrivacy(image: ImageData):boolean {
     return image.public.toString() == "true";
   }
 
-  editImage(image: ImageItem) {
-    console.log('Edit image:', image.name);
+  editImage(image: ImageData) {
+    console.log('Edit image:', image.filename);
     this.imageService.setImage(image);
   }
 
@@ -125,6 +125,7 @@ export class MyImagesComponent implements OnInit {
         next: (response) => {
           console.log('Image deleted:', response);
           this.userImages = this.userImages?.filter(img => img.id !== image.id); // Update UI
+          this.toggleDelete(null);
         },
         error: (error) => {
           console.error('Error deleting image:', error);

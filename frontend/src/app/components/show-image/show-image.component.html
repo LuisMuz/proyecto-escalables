@@ -1,21 +1,25 @@
 <body>
     <div class="main-container">
         <div class="image-details">
-            <img src="https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png" alt="Selected Image" class="main-image">
+
+            <img [src]="image?.url" alt="Selected Image" class="main-image">
+
+
+
             <div class="image-info">
-                <h2>Padrino Aguacate</h2>
+                <h2>{{image?.short_name}}</h2>
                 <div class="metadata">
                     <div class="author">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86S_ZlKylXOd3eTqAW5KXxkngeiP-uUxtNA&s" alt="Autor">
-                        <span><b>user</b></span>
+                        <span><b>{{image?.user_name}}</b></span>
                     </div>
                     <div class="likes">
-                        <span><b>11 likes</b></span>
+                        <span><b>{{image?.likes}} likes</b></span>
                     </div>
                 </div>
                 <div class="additional-info">
-                    <p><b>File Type:</b></p>
-                    <p><b>Date:</b></p>
+                    <p><b>File Type:</b> {{image?.image_type}}</p>
+                    <p><b>Date:</b> {{image?.uploadedAt}}</p>
                     <p><b>Time:</b></p>
                     <p><b>Location:</b></p>
                     <p><b>Size:</b></p>

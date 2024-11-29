@@ -50,6 +50,7 @@ def signup():
     name = data.get('name')
     user_name = data.get('user_name')
     user_birth = data.get('user_birth')
+    role = data.get('role', 'user')  # Rol predeterminado: 'user'
     
     # Create user in Firebase
     user = auth.create_user_with_email_and_password(email, password)
@@ -60,6 +61,7 @@ def signup():
       "email": email,
       "user_name": user_name,
       "user_birth": user_birth,
+      "role": role  # Agregar el rol al registro
     }
     db.child("users").child(user['localId']).set(user_data)
     
@@ -266,14 +268,27 @@ def get_user_images(user_id):
     user_images = db.child("users").child(user_id).child("images").get(token)
     
     images = []
+    private_images = 0
+    public_images = 0
+    
     if user_images.val():
       for image_id in user_images.val():
         image_data = db.child("images").child(image_id).get(token).val()
         image_data['id'] = image_id
         images.append(image_data)
-            
+        
+        # Count public and private images
+        if image_data.get("public") == "true":
+          public_images += 1
+        else:
+          private_images += 1
+
     return jsonify({
-      'images': images
+      'images': images,
+      'counts': {
+        'privateImages': private_images,
+        'publicImages': public_images
+      }
     }), 200
       
   except Exception as e:
@@ -430,17 +445,169 @@ def show():
 @app.route('/api/images/gallery', methods=['GET'])
 def get_public_images():
     try:
+        # Verify token
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'No token provided'}), 401
+        
+        # Get the logged-in user's ID
+        user = auth.get_account_info(token)
+        current_user_id = user['users'][0]['localId']
+        
+        # Fetch all images
         all_images = db.child("images").get()
         public_images = []
 
         if all_images and all_images.each():
             for image in all_images.each():
                 image_data = image.val()
-                if image_data.get("public") == True:
-                    image_data["id"] = image.key()
-                    public_images.append(image_data)
-
+                if image_data.get("public") == "true":  # Ensure image is public
+                  
+                    # Fetch the user who owns this image
+                    owner = None
+                    users = db.child("users").get()
+                    for user_entry in users.each():
+                        user_images = user_entry.val().get("images", {})
+                        if image.key() in user_images:
+                            owner = user_entry.key()
+                            break
+                    
+                    # Exclude images from the current user
+                    if owner and owner != current_user_id:
+                        image_data["id"] = image.key()
+                        image_data["user_id"] = owner
+                        image_data["user_name"] = db.child("users").child(owner).child("user_name").get().val()
+                        public_images.append(image_data)
+        
         return jsonify({'images': public_images}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+      
+
+
+@app.route('/api/images/<image_id>', methods=['GET'])
+def get_image_details(image_id):
+    try:
+        # Verify token
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'No token provided'}), 401
+
+        # Get the logged-in user's ID
+        image_data = db.child("images").child(image_id).get(token).val()
+
+        if not image_data:
+            return jsonify({'error': 'Image not found'}), 404
+
+        # Add user data
+        owner = None
+        users = db.child("users").get()
+        for user_entry in users.each():
+            user_images = user_entry.val().get("images", {})
+            if image_id in user_images:
+                owner = user_entry.key()
+                break
+
+        if owner:
+            image_data["user_id"] = owner
+            image_data["user_name"] = db.child("users").child(owner).child("user_name").get().val()
+            
+        
+        # Process the filename
+        filename = image_data.get("filename", "")
+        if "_" in filename:
+            short_name_with_ext = filename.split("_", 1)[1]  # Part without UUID
+        else:
+            short_name_with_ext = filename
+
+        # Extract name and extension
+        name_base, extension = os.path.splitext(short_name_with_ext)
+        short_name = name_base  
+        image_type = extension.lstrip(".")  
+
+        # Add new fields to the response
+        image_data["short_name"] = short_name
+        image_data["image_type"] = image_type
+        
+            
+        return jsonify(image_data), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/admin/users', methods=['GET'])
+def get_users_with_image_count():
+    try:
+        # Verifica que el usuario tiene el rol de admin
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'No token provided'}), 401
+        
+        # Verificar si el rol es 'admin'
+        user = auth.get_account_info(token)
+        user_id = user['users'][0]['localId']
+        user_data = db.child("users").child(user_id).get().val()
+        if user_data.get('role') != 'admin':
+            return jsonify({'error': 'Unauthorized'}), 403
+        
+        # Obtener todos los usuarios
+        users = db.child("users").get()
+        user_image_counts = []
+
+        for user_entry in users.each():
+            user_id = user_entry.key()
+            user_images_ref = db.child("users").child(user_id).child("images").get()
+
+            private_images = 0
+            public_images = 0
+
+            if user_images_ref.val():
+                for image_id in user_images_ref.val():
+                    image_data = db.child("images").child(image_id).get().val()
+                    if image_data.get("public") == "true":
+                        public_images += 1
+                    else:
+                        private_images += 1
+            
+            user_image_counts.append({
+                'user_id': user_id,
+                'name': user_entry.val().get('name'),
+                'public_images': public_images,
+                'private_images': private_images
+            })
+
+        return jsonify({'users': user_image_counts}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/admin/public-images', methods=['GET'])
+def get_public_images_for_admin():
+    try:
+        # Verifica que el usuario tiene el rol de admin
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'No token provided'}), 401
+        
+        # Verificar si el rol es 'admin'
+        user = auth.get_account_info(token)
+        user_id = user['users'][0]['localId']
+        user_data = db.child("users").child(user_id).get().val()
+        if user_data.get('role') != 'admin':
+            return jsonify({'error': 'Unauthorized'}), 403
+        
+        # Obtener todas las imágenes
+        all_images = db.child("images").get()
+        public_images = []
+
+        if all_images and all_images.each():
+            for image in all_images.each():
+                image_data = image.val()
+                if image_data.get("public") == "true":  # Solo imágenes públicas
+                    image_data['image_id'] = image.key()  # Agregar ID de la imagen
+                    public_images.append(image_data)
+        
+        return jsonify({'public_images': public_images}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

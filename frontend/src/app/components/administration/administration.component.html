@@ -1,0 +1,62 @@
+<body>
+    <div class="container">
+        <div class="card">
+            <p-table
+                #dt1
+                [value]="users"
+                [globalFilterFields]="['name', 'public_images', 'private_images']"
+                selectionMode="single"
+                dataKey="id"
+                [tableStyle]="{ 'min-width': '50rem' }"
+                [rows]="5"
+                [paginator]="true"
+                stateStorage="session"
+                stateKey="statedemo-session">
+            
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="name" style="width:25%">
+                            User <p-sortIcon field="name" />
+                        </th>
+                        <th pSortableColumn="public_images" style="width:25%">
+                            Public Images <p-sortIcon field="public_images" />
+                        </th>
+                        <th pSortableColumn="private_images" style="width:25%">
+                            Private Images <p-sortIcon field="private_images" />
+                        </th>
+                        <th style="width:25%">
+                        </th>
+                    </tr>
+                </ng-template>
+                
+                <ng-template pTemplate="body" let-user>
+                    <tr [pSelectableRow]="users">
+                        <td>
+                            <span class="p-column-title">Username</span>
+                            <img 
+                            [alt]="" 
+                            src="https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png" 
+                            width="32" 
+                            style="vertical-align: middle; border-radius: 50px;" />
+                            {{ user.name }}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Public Images</span>
+                            <span class="ml-1 vertical-align-middle">{{ user.public_images }}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title">Private Images</span>
+                            <span class="ml-1 vertical-align-middle">{{ user.private_images }}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title">Delete</span>
+                            <span><button class="delete-button">Delete</button></span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</body>
+
+

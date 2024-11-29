@@ -36,4 +36,9 @@ export class UserService {
     const userData = this.getUserData();
     return userData ? userData.user_birth : null;
   }
+
+  getUserToken(): string | null {
+    const userData = this.getUserData();
+    return userData ? userData.idToken : null;
+  }
 }

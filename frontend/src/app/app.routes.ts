@@ -11,6 +11,8 @@ import { LegalDocumentsComponent } from './pages/legal-documents/legal-documents
 import { InfoCollectionComponent } from './components/info-collection/info-collection.component';
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { TermsServiceComponent } from './components/terms-service/terms-service.component';
+import { AdministrationComponent } from './components/administration/administration.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 export const routes: Routes = [
   {path:"", component: LandingComponent},
@@ -18,8 +20,9 @@ export const routes: Routes = [
   {path:"gallery", component: GalleryPageComponent},
   {path:"signup", component: SignupComponent},
   {path:"my-images/edit", component: EditComponent},
-  {path:"images", component: ShowImagesPageComponent},
+  {path:"images/:id", component: ShowImagesPageComponent},
   {path:"profile", component: ProfilePageComponent},
+  {path:"administration", component: DashboardComponent},
   { 
     path: 'privacy-policy', 
     component: LegalDocumentsComponent,

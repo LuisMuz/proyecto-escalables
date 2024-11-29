@@ -5,11 +5,11 @@
 
   <span class="info"><div class="logo"></div>{{username}}</span>
   <br>
-  <span class="info">n public images<div class="point"></div>n private images</span>
+  <span class="info">{{publicImages}} public images<div class="point"></div>{{privateImages}} private images</span>
   <br>
 
   <div class="button-section">
-    <button (click)="onUploadImage()" class="primary-button">Subir imagen</button>
+    <button (click)="onUploadImage()" class="primary-button">Upload Image</button>
     <button class="secondary-button" (click)="logout()">Log Out</button>
   </div>
 

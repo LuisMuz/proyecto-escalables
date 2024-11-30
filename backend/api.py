@@ -485,7 +485,7 @@ def get_public_images():
       
 
 
-@app.route('/api/images/<image_id>', methods=['GET'])
+@app.route('/api/images/<image_id>/info', methods=['GET'])
 def get_image_details(image_id):
     try:
         # Verify token

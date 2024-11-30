@@ -54,4 +54,8 @@ export class ImageService {
   getImageById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/images/${id}`);
   }
+
+  getPublicImages(): Observable<any>{
+    return this.http.get(`${this.apiUrl}/admin/public-images`);
+  }
 }

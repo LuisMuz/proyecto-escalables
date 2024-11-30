@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './show-image.component.css'
 })
 export class ShowImageComponent {
-  image: any;
+  image: ImageData | any;
   token: string = '';
 
   constructor(
@@ -30,7 +30,7 @@ export class ShowImageComponent {
   fetchImageDetails(imageId: string): void {
     this.galleryService.getImageDetails(imageId, this.token).subscribe({
       next: (response) => {
-        this.image = response; 
+        this.image = response;
       },
       error: (error) => {
         console.log("Error al mostrar los detalles de la imagen:", error);

@@ -14,26 +14,39 @@
           </div>
           <h1>Welcome to PixelArt</h1>
           <br>
-      
-          <form [formGroup]="form" (submit)="onSubmit()">
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <label for="email">Email</label>
             <input type="email" id="email" placeholder="Email" formControlName="email">
-      
+            <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" style="color: red;">
+              <span *ngIf="form.get('email')?.errors?.['required']">Email is required.</span>
+              <span *ngIf="form.get('email')?.errors?.['email']">Invalid email.</span>
+            </div>
+
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Password" formControlName="password">
-      
-            <button type="submit" class="btn-register" >Sign In</button>
-            <div *ngIf="_errorMessage" style="color: red;">{{_errorMessage}}</div>
+            <div *ngIf="form.get('password')?.touched && form.get('password')?.invalid" style="color: red;">
+              <span *ngIf="form.get('password')?.errors?.['required']">Password is required.</span>
+              <span *ngIf="form.get('password')?.errors?.['minlength']">
+                Password must have at least 6 characters.
+              </span>
+            </div>
+
+            <button type="submit" class="btn-register">Sign In</button>
+            <div *ngIf="_errorMessage" style="color: red; margin-top: 10px;">
+              {{ _errorMessage }}
+            </div>
           </form>
+
           <br>
-<!--       
+<!--
           <div class="divider">
             <div class="line"></div>
             <span class="circle-divider">Or</span>
             <div class="line"></div>
           </div>
-      
-          
+
+
           <button class="btn-google">Continue with Google</button>
        -->
           <p class="disclaimer">
@@ -44,5 +57,5 @@
             Not on PixelArt? <a [routerLink]="['/signup']"><b>Sign up</b></a>
           </p>
         </div>
-    </div>      
+    </div>
 </body>

@@ -27,20 +27,21 @@ export class LogInComponent {
   onSubmit() {
     console.log(this.form.value)
     if (this.form.valid) {
-      const { email, password } = this.form.value;
+      const {email, password} = this.form.value;
       this.authService.login(email, password).subscribe({
         next: (response) => {
-          // console.log(response);
-          //this.router.navigate(['/gallery']); 
           this.router.navigate(['/gallery']).then(() => {
             window.location.reload();
           });
         },
         error: (error) => {
           console.error('Login failed', error);
-          this._errorMessage = error.error.message;
+          this._errorMessage = error.error.error;
         }
       });
+    }else{
+      this._errorMessage = 'Check your email and password';
+      this.form.markAllAsTouched();
     }
   }
 }

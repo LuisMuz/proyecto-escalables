@@ -96,7 +96,7 @@ def login():
     }), 200
       
   except Exception as e:
-    return jsonify({'error': str(e)}), 400
+    return jsonify({'error': "Invalid email or password"}), 400
   
 # Verificación de username en uso
 @app.route('/api/check-username', methods=['POST'])

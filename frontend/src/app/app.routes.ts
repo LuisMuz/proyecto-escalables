@@ -13,29 +13,30 @@ import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-poli
 import { TermsServiceComponent } from './components/terms-service/terms-service.component';
 import { AdministrationComponent } from './components/administration/administration.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { AuthGuard } from "./auth.guard";
 
 export const routes: Routes = [
   {path:"", component: LandingComponent},
   {path:"login", component: LoginComponent},
   {path:"gallery", component: GalleryPageComponent},
   {path:"signup", component: SignupComponent},
-  {path:"my-images/edit", component: EditComponent},
+  {path:"my-images/edit", component: EditComponent, canActivate: [AuthGuard]},
   {path:"images/:id", component: ShowImagesPageComponent},
-  {path:"profile", component: ProfilePageComponent},
-  {path:"administration", component: DashboardComponent},
-  { 
-    path: 'privacy-policy', 
+  {path:"profile", component: ProfilePageComponent, canActivate: [AuthGuard]},
+  {path:"administration", component: DashboardComponent, canActivate: [AuthGuard]},
+  {
+    path: 'privacy-policy',
     component: LegalDocumentsComponent,
-    children: [{ path: '', component: PrivacyPolicyComponent }] 
+    children: [{ path: '', component: PrivacyPolicyComponent }]
   },
-  { 
-    path: 'terms-of-service', 
+  {
+    path: 'terms-of-service',
     component: LegalDocumentsComponent,
-    children: [{ path: '', component: TermsServiceComponent }] 
+    children: [{ path: '', component: TermsServiceComponent }]
   },
-  { 
-    path: 'information-collection-notice', 
+  {
+    path: 'information-collection-notice',
     component: LegalDocumentsComponent,
-    children: [{ path: '', component: InfoCollectionComponent }] 
+    children: [{ path: '', component: InfoCollectionComponent }]
   }
 ];

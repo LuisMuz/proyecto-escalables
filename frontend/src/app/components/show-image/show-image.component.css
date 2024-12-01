@@ -65,6 +65,13 @@ body {
     padding: 4px 0px;
 }
 
+.actions{
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
 .download-btn {
     font-family: 'Montserrat Alternates', sans-serif;
     background-color: #ff6600;

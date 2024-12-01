@@ -58,4 +58,8 @@ export class ImageService {
   getPublicImages(): Observable<any>{
     return this.http.get(`${this.apiUrl}/admin/public-images`);
   }
+
+  likeImage(imageId: string, token: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/images/${imageId}/like`,{});
+  }
 }

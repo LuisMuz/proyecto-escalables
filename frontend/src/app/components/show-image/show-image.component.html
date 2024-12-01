@@ -4,8 +4,6 @@
 
             <img [src]="image?.url" alt="Selected Image" class="main-image">
 
-
-
             <div class="image-info">
                 <h2>{{image?.short_name}}</h2>
                 <div class="metadata">
@@ -28,7 +26,20 @@
                     <p><b>Filters:</b></p>
 
                 </div>
-                <button class="download-btn">Download</button>
+                <div class="actions">
+                  <p-button *ngIf="!liked" icon="pi pi-heart" [rounded]="true" [text]="true" (click)="toggleLike()"
+                  [style]="{color:'red'}"
+                  />
+                  <p-button *ngIf="liked" icon="pi pi-heart-fill" [rounded]="true" [text]="true" (click)="toggleLike()"
+                  [style]="{color:'red'}"
+                  />
+                  <button
+                    class="download-btn"
+                    (click)="downloadImage()"
+                    *ngIf="image?.url">
+                    Download
+                  </button>
+                </div>
             </div>
         </div>
     </div>

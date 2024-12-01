@@ -105,15 +105,13 @@ def check_username():
     print("Checking username...")
     data = request.get_json()
     user_name = data.get('user_name')
-    # Buscar en la base de datos usuarios con ese user_name
     users = db.child("users").get()
 
-    # Recorre los usuarios y verifica si alguno tiene el mismo user_name
     for user in users.each():
         if user.val().get("user_name") == user_name:
-            return jsonify({'exists': True}), 200  # Nombre de usuario ya en uso
+            return jsonify({'exists': True}), 200
 
-    return jsonify({'exists': False}), 200  # Regresa si el usuario existe
+    return jsonify({'exists': False}), 200
   except Exception as e:
     return jsonify({'error': str(e)}), 500
 
@@ -192,27 +190,23 @@ def like_image(image_id):
         
     user = auth.get_account_info(token)
     user_id = user['users'][0]['localId']
+    print("user likes")
     
     # Check if user already liked the image
     likes = db.child("likes").child(image_id).child(user_id).get(token)
-    
+    likes_image = db.child("images").child(image_id).child("likes").get().val()
+
     if likes.val():
       # Unlike
-      db.child("likes").child(image_id).child(user_id).remove(token)
+      db.child("likes").child(image_id).child(user_id).remove()
       # Decrease like count
-      db.child("images").child(image_id).child("likes").set(
-        db.child("images").child(image_id).child("likes").get(token).val() - 1,
-        token
-      )
+      db.child("images").child(image_id).child("likes").set(likes_image - 1)
       action = "unliked"
     else:
       # Like
-      db.child("likes").child(image_id).child(user_id).set(True, token)
+      db.child("likes").child(image_id).child(user_id).set(True)
       # Increase like count
-      db.child("images").child(image_id).child("likes").set(
-        db.child("images").child(image_id).child("likes").get(token).val() + 1,
-        token
-      )
+      db.child("images").child(image_id).child("likes").set(likes_image + 1)
       action = "liked"
         
     return jsonify({
@@ -482,24 +476,23 @@ def get_public_images():
         return jsonify({'images': public_images}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-      
-
 
 @app.route('/api/images/<image_id>/info', methods=['GET'])
 def get_image_details(image_id):
     try:
-        # Verify token
         token = request.headers.get('Authorization')
         if not token:
             return jsonify({'error': 'No token provided'}), 401
 
-        # Get the logged-in user's ID
         image_data = db.child("images").child(image_id).get(token).val()
-
         if not image_data:
             return jsonify({'error': 'Image not found'}), 404
 
-        # Add user data
+        user = auth.get_account_info(token)
+        user_id = user['users'][0]['localId']
+
+        liked_by_user = db.child("likes").child(image_id).child(user_id).get(token).val()
+
         owner = None
         users = db.child("users").get()
         for user_entry in users.each():
@@ -511,29 +504,24 @@ def get_image_details(image_id):
         if owner:
             image_data["user_id"] = owner
             image_data["user_name"] = db.child("users").child(owner).child("user_name").get().val()
-            
-        
-        # Process the filename
+
         filename = image_data.get("filename", "")
         if "_" in filename:
-            short_name_with_ext = filename.split("_", 1)[1]  # Part without UUID
+            short_name_with_ext = filename.split("_", 1)[1]  # Parte sin UUID
         else:
             short_name_with_ext = filename
 
-        # Extract name and extension
         name_base, extension = os.path.splitext(short_name_with_ext)
-        short_name = name_base  
-        image_type = extension.lstrip(".")  
+        short_name = name_base
+        image_type = extension.lstrip(".")
 
-        # Add new fields to the response
         image_data["short_name"] = short_name
         image_data["image_type"] = image_type
-        
-            
+        image_data["likedByUser"] = bool(liked_by_user)
+
         return jsonify(image_data), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 @app.route('/api/admin/users', methods=['GET'])
 def get_users_with_image_count():

@@ -50,7 +50,7 @@ def signup():
     name = data.get('name')
     user_name = data.get('user_name')
     user_birth = data.get('user_birth')
-    role = data.get('role', 'user')  # Rol predeterminado: 'user'
+    role = data.get('role', 'user')
     
     # Create user in Firebase
     user = auth.create_user_with_email_and_password(email, password)
@@ -61,7 +61,7 @@ def signup():
       "email": email,
       "user_name": user_name,
       "user_birth": user_birth,
-      "role": role  # Agregar el rol al registro
+      "role": role
     }
     db.child("users").child(user['localId']).set(user_data)
     
@@ -541,11 +541,14 @@ def get_users_with_image_count():
         # Obtener todos los usuarios
         users = db.child("users").get()
         user_image_counts = []
+        print("Catched users")
 
         for user_entry in users.each():
             user_id = user_entry.key()
             user_images_ref = db.child("users").child(user_id).child("images").get()
+            print(user_id)
 
+            print("ALO POLICIA")
             private_images = 0
             public_images = 0
 
@@ -556,6 +559,7 @@ def get_users_with_image_count():
                         public_images += 1
                     else:
                         private_images += 1
+            print(f'{user_id} ({ user_entry.val().get('name')}): {private_images}/{public_images}')
             
             user_image_counts.append({
                 'user_id': user_id,
@@ -566,6 +570,7 @@ def get_users_with_image_count():
 
         return jsonify({'users': user_image_counts}), 200
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
 
 

@@ -14,6 +14,7 @@ import { TermsServiceComponent } from './components/terms-service/terms-service.
 import { AdministrationComponent } from './components/administration/administration.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AuthGuard } from "./auth.guard";
+import { GuestPageComponent } from './pages/guest-page/guest-page.component';
 
 export const routes: Routes = [
   {path:"", component: LandingComponent},
@@ -24,6 +25,7 @@ export const routes: Routes = [
   {path:"images/:id", component: ShowImagesPageComponent},
   {path:"profile", component: ProfilePageComponent, canActivate: [AuthGuard]},
   {path:"administration", component: DashboardComponent, canActivate: [AuthGuard]},
+  {path:"guest", component:GuestPageComponent},
   {
     path: 'privacy-policy',
     component: LegalDocumentsComponent,

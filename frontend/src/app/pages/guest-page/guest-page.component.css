@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card p-image {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card p-image img {
+    zoom: 200%;
+    object-fit: fill;
+    width: 100%;
+}
+
+.card-info {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+.card-info span {
+    color: #555;
+    font-size: 14px;
+}
+
+.card-info span:last-child {
+    font-weight: bold;
+    color: #333;
+}
+
+.author {
+    display: flex;
+    align-items: center;
+}
+
+.author img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

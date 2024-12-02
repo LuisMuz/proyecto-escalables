@@ -18,8 +18,9 @@ body {
 
 .image-details {
     display: flex;
-    width: 68%;
+    /* width: 68%; */
     margin-bottom: 20px;
+    height: 400px;
 }
 
 .main-image {

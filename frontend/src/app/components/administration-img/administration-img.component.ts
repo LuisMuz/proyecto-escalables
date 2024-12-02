@@ -41,21 +41,20 @@ export class AdministrationImgComponent implements OnInit {
   ngOnInit() {
     this.imageService.getPublicImages().subscribe({
       next: (response) => {
-        this.publicImages = response.public_images.map((image: ImageData) => {
-          // @ts-ignore
-          return ({
-            ...image,
-            filename: this.getImageName(image.filename),
-            public: this.checkPrivacy(image),
-          });
-        });
+        console.log('Respuesta del servidor:', response.public_images);
+        this.publicImages = response.public_images.map((image: any) => ({
+          ...image,
+          filename: this.getImageName(image.filename),
+          public: this.checkPrivacy(image),
+          id: image.image_id 
+        }));
+        console.log('Imágenes procesadas:', this.publicImages);
       },
       error: (error) => {
         console.error('Error al cargar imágenes:', error);
       }
     });
   }
-
 
   getImageName(src: string): string {
     // Find the first '_'
@@ -86,21 +85,26 @@ export class AdministrationImgComponent implements OnInit {
     this.imageToDelete = image;
     this.visible = this.visible? false : true;
     if (image) {
-      console.log('Delete image:', image.filename);
+      console.log('Delete image:', image.id);
     }
+  }
+
+  deleteImage(image: ImageData | null) {
+    if (!image?.id) {
+      console.error('El ID de la imagen es undefined:', image); // Mensaje de error si falta image_id
+      return;
+    }
+  
+    this.imageService.deleteImage(image.id).subscribe({
+      next: () => {
+        console.log(`Imagen eliminada: ${image.filename}`);
+        this.publicImages = this.publicImages?.filter(img => img.id !== image.id); // Actualiza la lista
+        this.toggleDelete(null);
+      },
+      error: (error) => {
+        console.error('Error al eliminar la imagen:', error);
+      }
+    });
   }
   
-  deleteImage(image: ImageData | null) {
-    if(image){
-      this.imageService.deleteImage(image.id).subscribe({
-        next: (response) => {
-          console.log('Image deleted:', response);
-          this.publicImages = this.publicImages?.filter(img => img.id !== image.id); // Update UI
-        },
-        error: (error) => {
-          console.error('Error deleting image:', error);
-        }
-      });
-    }
-  }
 }

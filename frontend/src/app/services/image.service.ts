@@ -43,6 +43,16 @@ export class ImageService {
     return this.http.delete(`${this.apiUrl}/images/${imageId}/delete`);
   }
 
+  // deleteImageAdmin(imageId: string): Observable<any> {
+  //   return this.http.delete(`${this.apiUrl}/images/${imageId}/delete/admin`);
+  // }
+
+  deleteImageAdmin(imageId: string) {
+    const url = `${this.apiUrl}/api/images/${imageId}/delete/admin`;
+    console.log('URL de eliminación:', url);
+    return this.http.delete(url);
+  }
+
   editImage(imageId: string, action: string): Observable<any> {
     console.log({
       imageId: imageId,

@@ -1,12 +1,16 @@
 <div class="top-bar">
-  <div class="logo">
+  <div *ngIf="appearance === 1" class="logo">
     <img src="Logo 1.png" [routerLink]="['/']" alt="Logo">
   </div>
 
-  <div class="search">
-    <form>
+  <div *ngIf="appearance === 2 || appearance === 3" class="logo">
+    <img src="Logo 1.png" alt="Logo">
+  </div>
+
+  <div class="search" style="width: 800px;">
+    <!-- <form>
       <input type="text" placeholder="Search..." />
-    </form>
+    </form> -->
   </div>
 
   <!-- Appearance 1 -->

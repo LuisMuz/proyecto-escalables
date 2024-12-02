@@ -24,8 +24,8 @@
                         <th pSortableColumn="private_images" style="width:25%">
                             Private Images <p-sortIcon field="private_images" />
                         </th>
-                        <th style="width:25%">
-                        </th>
+                        <!-- <th style="width:25%">
+                        </th> -->
                     </tr>
                 </ng-template>
                 
@@ -35,7 +35,7 @@
                             <span class="p-column-title">Username</span>
                             <img 
                             [alt]="" 
-                            src="https://aguacatec.es/wp-content/uploads/2023/10/e5a978b8-6772-4c85-a50e-15581af7d483.png" 
+                            src="perfil.png" 
                             width="32" 
                             style="vertical-align: middle; border-radius: 50px;" />
                             {{ user.name }}
@@ -48,10 +48,10 @@
                             <span class="p-column-title">Private Images</span>
                             <span class="ml-1 vertical-align-middle">{{ user.private_images }}</span>
                         </td>
-                        <td>
+                        <!-- <td>
                             <span class="p-column-title">Delete</span>
                             <span><button class="delete-button">Delete</button></span>
-                        </td>
+                        </td> -->
                     </tr>
                 </ng-template>
             </p-table>

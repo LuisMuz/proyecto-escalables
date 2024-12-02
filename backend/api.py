@@ -386,8 +386,6 @@ def edit_image(image_id):
     elif action == 'blur':
       image = cv2.medianBlur(image, 17)
 
-    print(f'Image {image_data['filename']} processed')
-
     # Guardar la imagen editada
     name = image_data['filename'].split(".")
     edited_filename = f"{name[0]}-{action}.{name[1]}"
@@ -476,6 +474,45 @@ def get_public_images():
         return jsonify({'images': public_images}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+      
+      
+@app.route('/api/images/guest', methods=['GET'])
+def get_public_images_guest():
+    try:        
+        # Obtener todas las imágenes de la base de datos
+        all_images = db.child("images").get()
+        public_images = []
+
+        # Filtrar las imágenes públicas
+        if all_images and all_images.each():
+            for image in all_images.each():
+                image_data = image.val()
+                if image_data.get("public") == "true":  # Verificar si la imagen es pública
+                    # Buscar el usuario propietario de la imagen
+                    owner_id = None
+                    users = db.child("users").get()
+                    for user_entry in users.each():
+                        user_images = user_entry.val().get("images", {})
+                        if image.key() in user_images:
+                            owner_id = user_entry.key()
+                            break
+                    
+                    # Si encontramos al propietario, agregar su nombre de usuario
+                    if owner_id:
+                        owner_username = db.child("users").child(owner_id).child("user_name").get().val()
+                        image_data["user_id"] = owner_id
+                        image_data["user_name"] = owner_username  # Agregar el username del propietario
+                    
+                    # Agregar la imagen a la lista de imágenes públicas
+                    image_data["id"] = image.key()  # Agregar el ID de la imagen
+                    public_images.append(image_data)
+
+
+        # Devolver las imágenes públicas en formato JSON
+        return jsonify({'images': public_images}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/images/<image_id>/info', methods=['GET'])
 def get_image_details(image_id):
@@ -603,6 +640,7 @@ def get_public_images_for_admin():
         return jsonify({'public_images': public_images}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 
 if __name__ == '__main__':

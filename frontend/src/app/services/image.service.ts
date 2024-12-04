@@ -27,7 +27,7 @@ export class ImageService {
     formData.append('file', file);
 
     // Llama al endpoint de subida de imágenes
-    return this.http.post(`${this.apiUrl}/upload`, formData);
+    return this.http.post(`${this.apiUrl}/images/upload`, formData);
   }
 
   getUserImages(): Observable<any>{

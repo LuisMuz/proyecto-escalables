@@ -7,6 +7,11 @@ Technologies
 - Python (Flask to handle routes & cv2 for image enhancing)
 - Firebase (database & store images)
 
+https://github.com/user-attachments/assets/f4032aca-88f6-4010-9b1c-66a6f6d73e0d
+
+
+https://github.com/user-attachments/assets/5cda25de-42ea-4c13-a40b-8e4dbb1e74c1
+
 ---
 
 ## Installation

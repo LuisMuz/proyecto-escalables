@@ -7,10 +7,6 @@ Technologies
 - Python (Flask to handle routes & cv2 for image enhancing)
 - Firebase (database & store images)
 
-![Landing](https://github.com/LuisMuz/proyecto-escalables/blob/main/resources/landing.mp4)
-
-![Use](https://github.com/LuisMuz/proyecto-escalables/blob/main/resources/use.mp4)
-
 ---
 
 ## Installation

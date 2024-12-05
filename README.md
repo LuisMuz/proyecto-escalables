@@ -4,5 +4,65 @@ PixelArt is a web-based image platform that empowers users to transform their ph
 
 Technologies
 - Angular (with PrimeNg Components)
-- Flask (routes)
+- Python (Flask to handle routes & cv2 for image enhancing)
 - Firebase (database & store images)
+
+![Landing](https://github.com/LuisMuz/proyecto-escalables/blob/main/resources/landing.mp4)
+
+![Use](https://github.com/LuisMuz/proyecto-escalables/blob/main/resources/use.mp4)
+
+---
+
+## Installation
+
+### Backend Dependencies
+```bash
+pip install flask opencv-python firebase-rest-api flask-cors
+```
+### Frontend Dependencies
+Make sure that you have Node.js and npm installed to use Angular
+```bash
+npm install
+```
+
+## Quick Start
+
+### Firebase
+
+1. **Create a Firebase project:** Head over to the Firebase console (console.firebase.google.com) and create a new project.
+
+
+2. **Enable Firebase services:** You'll need to enable the following services for PixelArt:
+   - Authentication (credentials)
+   - Realtime Database (for storing user data like edited image references)
+   - Cloud Storage (for storing the actual edited images)
+   
+
+3. **Create** a new file named `firebase_config.py` inside the backend directory and paste your firebase api key and configs. 
+    ```
+   config = {
+       "apiKey": "YOUR_API_KEY",
+       "authDomain": "YOUR_PROJECT_ID.firebaseapp.com",
+       "databaseURL": "https://YOUR_DATABASE_NAME.firebaseio.com",
+       "projectId": "YOUR_PROJECT_ID",
+       "storageBucket": "YOUR_PROJECT_ID.appspot.com",
+       "messagingSenderId": "YOUR_MESSAGING_SENDER_ID",
+       "appId": "YOUR_APP_ID"
+   }
+   ```
+   ###### Note: the `databaseURL` can be found in the firebase realtime page.
+
+if you wish to modify the backend, you can find the `firebase-rest-api` documentation [here](https://github.com/AsifArmanRahman/firebase-rest-api)
+
+### Run
+
+In the backend directory
+```bash
+python ./api.py
+```
+In the frontend directory
+```bash
+ng serve
+```
+
+   
